@@ -223,18 +223,23 @@ Portanto:</p>
 </p>
 	<p><b>Ligações:</b> são representadas por linhas que apresentam as relações sociais estabelecidas entre os sujeitos. O tamanho da ponteira das setas, nas ligações, simboliza a  quantidade e a direção das trocas de mensagens realizadas no ambiente. </p>
 </div>
-<div id="tabs" style="background-color:#dedede">
-	<img id ="interrogacao" src="Imagens/interrogacao.png">
+
+<?php require_once('future/header.php') ?>
+
+<!-- Menu comentado -->
+
+<div id="tabs" style="background-color: #dedede">
+	<!-- <img id ="interrogacao" src="Imagens/interrogacao.png">
     <ul>
       <li id="mapInt" class="mdl-button mdl-js-button  mdl-button--colored"><a href="#tabs-1">Mapa Interações</a></li>
       <li id="mapCat" class="mdl-button mdl-js-button  mdl-button--colored"><a href="#tabs-2">Mapa Categorias</a></li>
-    </ul>
-
+    </ul> -->
 <div>
-            <br>
-			<input type="button" value="Aumentar Mapa" OnClick="zoomClick(1.1)" />
-            <input type="button" value="Diminuir Mapa" OnClick="zoomClick(0.9)" />
-			<input type="button" value="Mapa Original" OnClick="zoomClick(0)" />
+    <br>
+	<!-- <input type="button" value="Aumentar Mapa" OnClick="zoomClick(1.1)" />
+    <input type="button" value="Diminuir Mapa" OnClick="zoomClick(0.9)" />
+	<input type="button" value="Mapa Original" OnClick="zoomClick(0)" /> -->
+	<button name="button" OnClick="zoomClick(1.1)"> coisas </button>
 </div>
     <div id="tabs-1" style="width:100%; height:100%">
 
