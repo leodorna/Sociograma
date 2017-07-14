@@ -1,10 +1,21 @@
   <!-- The drawer is always open in large screens. The header is always shown,
   even in small screens. -->
 
-<div class="">
-    <div class="mdl-cell mdl-cell--12-col">4</div>    
-</div>
 
+
+
+  <div class="mdl-cell mdl-cell--12-col">
+      <div class="mdl-layout__header-row">
+          <div class="mdl-layout-spacer"></div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+              <nav class="mdl-navigation grey-nav">
+                    <a class="mdl-navigation__link" href="">Acessibilidade</a>
+                    <a class="mdl-navigation__link" href="">Notificação</a>
+                    <a class="mdl-navigation__link" href="">Sair</a>
+              </nav>
+          </div>
+      </div>
+  </div>
 <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
         <div class="mdl-layout-spacer"></div>

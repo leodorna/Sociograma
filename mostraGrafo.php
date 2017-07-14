@@ -87,11 +87,15 @@ require_once(dirname(__FILE__).'/sociograma.php');
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
 <link rel="stylesheet" href="/resources/demos/style.css">
+<link rel="stylesheet" href="/css/framework/jquery-ui.structure.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-red.min.css" />
+<script src="js/librarys/jquery-1.12.4.js"></script>
+<script src="js/framework/jquery-ui.min.js"></script>
+<script src="js/librarys/material.min.js"></script>
+
+<!-- <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-red.min.css" /> -->
+<link rel="stylesheet" href="css/general.css">
+
 <script src="tabela.js"></script>
 <script>
   $( function() {
@@ -122,7 +126,7 @@ require_once(dirname(__FILE__).'/sociograma.php');
 		<!-- Menu comentado -->
 
 		<div id="tabs" style="background-color: #dedede">
-			<img id ="interrogacao" src="Imagens/interrogacao.png">
+			<img id ="interrogacao" src="Imagens/interrogacao.png" style="display:none;">
 			<!-- <ul>
 				<li id="mapInt" class="mdl-button mdl-js-button  mdl-button--colored"><a href="#tabs-1">Mapa Interações</a></li>
 				<li id="mapCat" class="mdl-button mdl-js-button  mdl-button--colored"><a href="#tabs-2">Mapa Categorias</a></li>
