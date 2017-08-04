@@ -1,57 +1,57 @@
    var nodes = [];
    var edges = [];
    var links = [];
-   
-   <?
-       function printEstrategias($estrategias){
-         echo "'".$estrategias[0]['Estrategias']."'";
-          for($i = 1; $i < 6; $i++){
-            echo ",'".$estrategias[$i]['Estrategias']."'";
-         }
-       }
 
-       echo "var estrategiaColab = [";
-       printEstrategias(db_busca("SELECT `Estrategias` 
-                                FROM  `Estrategias&Categorias` 
-                                WHERE  `Categorias` =  'Colaboracao'"));
-       echo "];";
+  //  <?
+  //      function printEstrategias($estrategias){
+  //        echo "'".$estrategias[0]['Estrategias']."'";
+  //         for($i = 1; $i < 6; $i++){
+  //           echo ",'".$estrategias[$i]['Estrategias']."'";
+  //        }
+  //      }
+   //
+  //      echo "var estrategiaColab = [";
+  //      printEstrategias(db_busca("SELECT `Estrategias`
+  //                               FROM  `Estrategias&Categorias`
+  //                               WHERE  `Categorias` =  'Colaboracao'"));
+  //      echo "];";
+   //
+  //      echo "var estrategiaAgrup = [";
+  //      printEstrategias(db_busca("SELECT `Estrategias`
+  //                               FROM  `Estrategias&Categorias`
+  //                               WHERE  `Categorias` =  'Agrupamento'"));
+  //      echo "];";
+   //
+  //      echo "var estrategiaPop = [";
+  //      printEstrategias(db_busca("SELECT `Estrategias`
+  //                               FROM  `Estrategias&Categorias`
+  //                               WHERE  `Categorias` =  'Popularidade'"));
+  //      echo "];";
+   //
+  //      echo "var estrategiaDSRT = [";
+  //      printEstrategias(db_busca("SELECT `Estrategias`
+  //                               FROM  `Estrategias&Categorias`
+  //                               WHERE  `Categorias` =  'DSRT'"));
+  //      echo "];";
+   //
+  //      echo "var estrategiaDSPT= [";
+  //      printEstrategias(db_busca("SELECT `Estrategias`
+  //                               FROM  `Estrategias&Categorias`
+  //                               WHERE  `Categorias` =  'DSPT'"));
+  //      echo "];";
+   //
+  //      echo "var pesoWF = ".$interacaoWebfolio.";\n";
+  //      echo "var pesoBP = ".$interacaoBatepapo.";\n";
+  //      echo "var pesoCo = ".$interacaoContatos.";\n";
+  //      echo "var pesoA2 = ".$interacaoA2.";\n";
+  //      echo "var pesoFo = ".$interacaoForum.";\n";
+  //      echo "var pesoBib = ".$interacaoBiblioteca.";\n";
+   //
+  //      $sociograma=new Sociograma($codUsuario,$codTurma,$layout,$directed,$dataInicio,$dataFim,$corAluno,$corProfessor,$corMonitor,$interacaoContatos,$interacaoBatepapo,$interacaoForum,$interacaoBiblioteca,$interacaoA2,$interacaoWebfolio,$arrayMembros,$arrayGrupos);
+  //    ?>
 
-       echo "var estrategiaAgrup = [";
-       printEstrategias(db_busca("SELECT `Estrategias` 
-                                FROM  `Estrategias&Categorias` 
-                                WHERE  `Categorias` =  'Agrupamento'"));
-       echo "];";
 
-       echo "var estrategiaPop = [";
-       printEstrategias(db_busca("SELECT `Estrategias` 
-                                FROM  `Estrategias&Categorias` 
-                                WHERE  `Categorias` =  'Popularidade'"));
-       echo "];";
-
-       echo "var estrategiaDSRT = [";
-       printEstrategias(db_busca("SELECT `Estrategias` 
-                                FROM  `Estrategias&Categorias` 
-                                WHERE  `Categorias` =  'DSRT'"));
-       echo "];"; 
-
-       echo "var estrategiaDSPT= [";
-       printEstrategias(db_busca("SELECT `Estrategias` 
-                                FROM  `Estrategias&Categorias` 
-                                WHERE  `Categorias` =  'DSPT'"));
-       echo "];";                   
-
-       echo "var pesoWF = ".$interacaoWebfolio.";\n";
-       echo "var pesoBP = ".$interacaoBatepapo.";\n";
-       echo "var pesoCo = ".$interacaoContatos.";\n";
-       echo "var pesoA2 = ".$interacaoA2.";\n";
-       echo "var pesoFo = ".$interacaoForum.";\n";
-       echo "var pesoBib = ".$interacaoBiblioteca.";\n";
-
-       $sociograma=new Sociograma($codUsuario,$codTurma,$layout,$directed,$dataInicio,$dataFim,$corAluno,$corProfessor,$corMonitor,$interacaoContatos,$interacaoBatepapo,$interacaoForum,$interacaoBiblioteca,$interacaoA2,$interacaoWebfolio,$arrayMembros,$arrayGrupos);
-     ?>
-
-  
-edges.forEach(function(e) { 
+edges.forEach(function(e) {
     // Get the source and target nodes
     var sourceNode = nodes.filter(function(n) { return n.id === e.source; })[0],
         targetNode = nodes.filter(function(n) { return n.id === e.target; })[0],
@@ -78,11 +78,11 @@ var width = 1400,
 if (outline) {
     tocolor = "stroke"
     towhite = "fill"
-  }    
+  }
 
 function zoomHandler() {
     svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-} 
+}
 
 
 var force = d3.layout.force()
@@ -210,7 +210,7 @@ d3.select("#buttons").style("visibility", "hidden");
 
 //TESTAR O INNERHTML ETC PARA MODIFICAR O TEXTO
 d3.select("#mapInt").on("click", function(){
-    
+
 });
 
 d3.select("#mapCat").on("click", function(){
@@ -223,16 +223,16 @@ d3.select("#Selecao").on("change", function(){
     switch(modo)
     {
       case '0':circle.style("opacity", 1);
-               path.style("opacity", 1); 
+               path.style("opacity", 1);
                text.style("opacity", 1);
-               seta.style("opacity", 1); 
+               seta.style("opacity", 1);
                box.style("visibility", "hidden");
                hideButtons();
                break;
       case '1':circle.style("opacity", function(d){if(d.colab >= mediaColab || d.isolado == '1') return 1; else return highlight_trans;});
                text.style("opacity", function(d){if(d.colab   >= mediaColab|| d.isolado == '1') return 1; else return highlight_trans;});
                seta.style("opacity", highlight_trans);
-               path.style("opacity", highlight_trans); 
+               path.style("opacity", highlight_trans);
                textBox.text(estrategiaColab[Math.floor(Math.random()*6)]);
                textBoxHeight = Number(textBox.style("height").replace("px",""));
                box.style("height", textBoxHeight+20).style("visibility", "visible");
@@ -241,7 +241,7 @@ d3.select("#Selecao").on("change", function(){
       case '2':circle.style("opacity", function(d){if(d.distR== '1'|| d.isolado == '1') return 1; else return highlight_trans;});
                text.style("opacity", function(d){if(d.distR== '1' || d.isolado == '1') return 1; else return highlight_trans;});
                seta.style("opacity", highlight_trans);
-               path.style("opacity", highlight_trans); 
+               path.style("opacity", highlight_trans);
                textBox.text(estrategiaDSRT[Math.floor(Math.random()*6)]);
                textBoxHeight = Number(textBox.style("height").replace("px",""));
                box.style("height", textBoxHeight+20).style("visibility", "visible");
@@ -250,7 +250,7 @@ d3.select("#Selecao").on("change", function(){
       case '3':circle.style("opacity", function(d){if(d.distP== '1' || d.isolado == '1') return 1; else return highlight_trans;});
                text.style("opacity", function(d){if(d.distP== '1' || d.isolado == '1') return 1; else return highlight_trans;});
                seta.style("opacity", highlight_trans);
-               path.style("opacity", highlight_trans); 
+               path.style("opacity", highlight_trans);
                textBox.text(estrategiaDSPT[Math.floor(Math.random()*6)]);
                textBoxHeight = Number(textBox.style("height").replace("px",""));
                box.style("height", textBoxHeight+20).style("visibility", "visible");
@@ -259,7 +259,7 @@ d3.select("#Selecao").on("change", function(){
       case '4':circle.style("opacity", function(d){if(d.popularidade >= desvioPopular + mediaPop) return 1; else return highlight_trans;});
                text.style("opacity", function(d){if (d.popularidade >= desvioPopular + mediaPop) return 1; else return highlight_trans;});
                seta.style("opacity", highlight_trans);
-               path.style("opacity", highlight_trans); 
+               path.style("opacity", highlight_trans);
                textBox.text(estrategiaPop[Math.floor(Math.random()*6)]);
                textBoxHeight = Number(textBox.style("height").replace("px",""));
                box.style("height", textBoxHeight+20).style("visibility", "visible");
@@ -270,14 +270,14 @@ d3.select("#Selecao").on("change", function(){
                path.style("opacity", highlight_trans);
                text.style("opacity", highlight_trans);
                d3.select("#buttons").style("visibility", "visible");
-               
+
                textBox.text(estrategiaAgrup[Math.floor(Math.random()*6)]);
                textBoxHeight = Number(textBox.style("height").replace("px",""));
                box.style("height", textBoxHeight+20).style("visibility", "visible");
     }
   });
-                                              
-                                              
+
+
 
 circle.on("mouseover", function(d)
                        {
@@ -286,7 +286,7 @@ circle.on("mouseover", function(d)
                           var posX = 0;
                           var posY = 0;
                           var escala = 1;
-                                                           
+
                               if((transform = document.getElementsByTagName("svg")[0].getElementsByTagName("g")[0].getAttribute("transform")))
                               {
                                   transform = transform.replace("translate(", "");
@@ -301,7 +301,7 @@ circle.on("mouseover", function(d)
 
                              }
                               else transform = 0;
-                            
+
                              div.transition()
                                       .duration(1)
                                      .style("top", (posY+ (d.y-10)*escala-100)+"px")
@@ -318,7 +318,7 @@ circle.on("mouseover", function(d)
                                 BP.text("Bate-Papo: "+d.bp);
                                 WF.text("Webfolio: "+d.wf);
                                 break;
-                              } 
+                              }
                               case '1':{
                                 if(pesoBib> 0) biblioteca.text("Biblioteca("+getRelevancia(pesoBib)+"): "+ d.colabBib);
                                 else biblioteca.text("Biblioteca: N/A");
@@ -370,7 +370,7 @@ circle.on("mouseover", function(d)
                                 BP.text("Bate-Papo: "+d.bp);
                                 WF.text("Webfolio: "+d.wf);*/
                                 break;
-                              } 
+                              }
                               case '5': {
                                 biblioteca.text("Grupo:"+ d.grupo);
                                 forum.text("");
@@ -380,17 +380,17 @@ circle.on("mouseover", function(d)
                                 contatos.text("");
                               }
                             }
-                             
+
 
                           })
       .on("mousedown", function(d)
-                                { 
+                                {
                                   d3.event.stopPropagation();
-                                  if (highlight_node === null) set_highlight(d)                
+                                  if (highlight_node === null) set_highlight(d)
                                   focus_node = d;
                                   if(modo != '5')
-                                    set_focus(d) 
-                                } 
+                                    set_focus(d)
+                                }
          )
 
       .on("mouseout", function(d) {
@@ -399,8 +399,8 @@ circle.on("mouseover", function(d)
       .duration(150)
       .style("opacity", 0);
 } );
-    
-    circle.on("mouseup",  
+
+    circle.on("mouseup",
     function(d) {
 
     if (focus_node!==null)
@@ -411,7 +411,7 @@ circle.on("mouseover", function(d)
         switch(modo)
           {
           case '0':circle.style("opacity", 1);
-               path.style("opacity", 1); 
+               path.style("opacity", 1);
                text.style("opacity", 1);
                seta.style("opacity", 1); break;
           case '1':circle.style("opacity", function(d){if(d.colab >= mediaColab || d.isolado == '1') return 1; else return highlight_trans;});
@@ -434,7 +434,7 @@ circle.on("mouseover", function(d)
           }
       }
     }
-  
+
   if (highlight_node === null) exit_highlight();
     d.fixed = true;
     });
@@ -459,8 +459,8 @@ function fazLinks(d)
   var cosA = deltaX/distance;
   var dy = raio*sinA;
   var dx = raio*cosA;
-  return  (d.source.x + dx) + "," + (d.source.y+dy) + " " + 
-  (d.target.x-dx) + "," + (d.target.y-dy); 
+  return  (d.source.x + dx) + "," + (d.source.y+dy) + " " +
+  (d.target.x-dx) + "," + (d.target.y-dy);
 }
 
 function fazSeta(d)
@@ -485,7 +485,7 @@ function fazSeta(d)
     var y2 = ya - (y1 - ya);
 
     return x0+","+y0+" "+x1+","+y1+" "+x2+","+y2;
-}  
+}
 
 function procuraPorID(array, id){
   for(var i = 0; i < array.lenght; i++){
@@ -495,7 +495,7 @@ function procuraPorID(array, id){
 }
 
 function corGrupo(grupo){
-  var arrayCores = ["#FF5733", "#33B2FF", "#4B6D81", "#F065E5", "#9B9CA6", "#6AD340", "#265A11", "#ECF018", "#000000",  
+  var arrayCores = ["#FF5733", "#33B2FF", "#4B6D81", "#F065E5", "#9B9CA6", "#6AD340", "#265A11", "#ECF018", "#000000",
                       "#E6B3F9", "#FF0000", "#0000FF", "#C9EAAC", "#6000FE", "#AFADB2", "#C3FFE9", "#4C5A55", "#17107E"];
 
   return arrayCores[grupo];
@@ -515,7 +515,7 @@ function transform(d) {
 
  function zoomHandler() {
         svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-      } 
+      }
 
   function set_highlight(d)
   {
@@ -537,7 +537,7 @@ function transform(d) {
 
 function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
-} 
+}
 
     function exit_highlight()
     {
@@ -551,16 +551,16 @@ function isNumber(n) {
             text.style("font-weight", "normal");
             path.style("stroke", function(o) {return (isNumber(o.score) && o.score>=0)?color(o.score):default_link_color});
           }
-        }   
+        }
     }
 
 function set_focus(d)
-{ 
+{
  // console.log(d);
   if (highlight_trans<1)
   {
     circle.style("opacity", function(o) { //console.log(o);
-            if(isConnected(d,o)) return  1; 
+            if(isConnected(d,o)) return  1;
             else return highlight_trans;
        });
 
@@ -574,7 +574,7 @@ function set_focus(d)
 
     seta.style("opacity", function(o) {
                 return o.source.index == d.index || o.target.index == d.index ? 1 : highlight_trans;
-            }); 
+            });
   }
 }
     function isConnected(a, b) {
@@ -593,12 +593,12 @@ function set_focus(d)
       while(string[i] != ',')
       {
         retorno.push(string[i]);
-        i++;       
+        i++;
       }
-    
+
       return retorno.join('');   //o retorno.join vai fazer com que todos os caracteres dentro do array formem uma string única.
     }
-  
+
   function pegaY(string)
   {
     var i =0;                   //o array transform vai ser algo como "y.yyyyyyscale(s.ssss)"
@@ -608,7 +608,7 @@ function set_focus(d)
       retorno.push(string[i]);
       i++;
     }
-    
+
     return retorno.join('');
   }
 
@@ -683,7 +683,7 @@ function set_focus(d)
       })
 
     }
-        
+
 
    function searchInGroup(key, grupo){
       for(var i = 0; i < grupo.length; i++){
