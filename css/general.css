@@ -1,2 +1,2 @@
-@import url(framework/material.min.css);.grey-nav *{color:#757575}
+@import url(framework/material.min.css);.grey-nav *{color:#757575 !important}@media all and (min-width: 990px){.mdl-layout__drawer-button{display:none}.drawer-space{margin-top:80px}}.top-shadow{box-shadow:0px 50px 15px -54px black}.top-shadow.inset-shadow{box-shadow:0px 50px 15px -54px black inset}.no-margin{margin:0}.content-grid{width:100%;padding:0px}
 /*# sourceMappingURL=general.css.map */

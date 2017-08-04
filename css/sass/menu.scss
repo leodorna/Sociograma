@@ -1,5 +1,14 @@
 .grey-nav {
     * {
-        color: #757575;  
+        color: #757575 !important;
+    }
+}
+
+@media all and (min-width: 990px ) {
+    .mdl-layout__drawer-button {
+        display: none;
+    }
+    .drawer-space {
+        margin-top: 80px;
     }
 }
