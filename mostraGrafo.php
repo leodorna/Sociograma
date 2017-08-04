@@ -89,7 +89,7 @@ require_once(dirname(__FILE__).'/sociograma.php');
 <link rel="stylesheet" href="/resources/demos/style.css">
 <link rel="stylesheet" href="/css/framework/jquery-ui.structure.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<script src="js/librarys/jquery-1.12.4.js"></script>
+<!-- <script src="js/librarys/jquery-1.12.4.js"></script> -->
 <script src="js/framework/jquery-ui.min.js"></script>
 <script src="js/librarys/material.min.js"></script>
 
