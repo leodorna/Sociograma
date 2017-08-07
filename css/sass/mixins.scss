@@ -1,0 +1,10 @@
+@mixin pseudElement {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    content: ' ';
+    display: block;
+    width: 15px;
+    height: 15px;
+    background: black;
+}

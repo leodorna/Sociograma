@@ -21,23 +21,27 @@
     <div class="mdl-layout__header-row">
         <div class="mdl-layout-spacer"></div>
         <div class="content-grid mdl-grid">
-            <div class="mdl-cell mdl-cell--4-col">
-                <p>THINGS</p>
-            </div>
-            <div class="mdl-cell mdl-cell--8-col mdl-textfield--align-right">
-                <div class="mdl-textfield mdl-js-textfield">
-                    <p>THING</p>
+            <div class="mdl-cell mdl-cell--6-col mdl-cell--middle no-margin">
+                <div class="place-box">
+                    <h3>THINGS</h3>
                 </div>
+                <div class="">
+                    <a href="#"><span>THINGS</span></a>
+                    <a href="#"><span>THINGS</span></a>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--6-col mdl-textfield--align-right mdl-cell--middle">
+                <p class="no-margin">THING</p>
             </div>
         </div>
     </div>
 </header>
 <div class="mdl-layout__drawer drawer-space top-shadow inset-shadow">
   <span class="mdl-layout-title">Title</span>
-  <nav class="mdl-navigation">
-    <a class="mdl-navigation__link" href="">Link</a>
-    <a class="mdl-navigation__link" href="">Link</a>
-    <a class="mdl-navigation__link" href="">Link</a>
-    <a class="mdl-navigation__link" href="">Link</a>
-  </nav>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="">Link</a>
+      <a class="mdl-navigation__link" href="">Link</a>
+      <a class="mdl-navigation__link" href="">Link</a>
+      <a class="mdl-navigation__link" href="">Link</a>
+    </nav>
 </div>

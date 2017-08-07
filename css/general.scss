@@ -1,7 +1,9 @@
 @import "framework/material.min.css";
 
 // custom
+@import "sass/mixins";
 @import "sass/menu";
 @import "sass/generic-effects";
 @import "sass/handlers";
 @import "sass/grid";
+@import "sass/text";

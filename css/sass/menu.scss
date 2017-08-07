@@ -8,7 +8,19 @@
     .mdl-layout__drawer-button {
         display: none;
     }
+
     .drawer-space {
         margin-top: 80px;
+    }
+
+    .place-box {
+        position: relative;
+        &::before {
+            @include pseudElement();
+            top: 11px;
+            left: -37px;
+            width: 34px;
+            height: 15px;
+        }
     }
 }
