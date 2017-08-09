@@ -1,0 +1,75 @@
+.grey-nav {
+    * {
+        color: #757575 !important;
+    }
+}
+
+
+
+.map-select {
+    text-decoration: none;
+    color: white;
+
+    @include transition();
+
+    &:first-child {
+        margin-right: 15px;
+    }
+
+    &:after {
+        @include transition();
+        @include pseudElement();
+
+        bottom: -5px;
+        left: 50%;
+        top: unset;
+
+        height: 5px;
+        width: 0%;
+
+        background: #B5D9E0;
+
+    }
+    &.active, &:hover {
+        position: relative;
+        &:after {
+            background: #6DCEE2;
+
+            left: 0;
+            width: 100%;
+
+        }
+    }
+}
+
+@media all and (min-width: 990px ) {
+    .mdl-layout__drawer-button {
+        display: none;
+    }
+
+    .drawer-space {
+        margin-top: 80px;
+    }
+
+    .place-box {
+        position: relative;
+        font: normal normal normal 14px/1 FontAwesome;
+        text-rendering: auto;
+
+        &::before {
+            @include pseudElement();
+
+            background: transparent;
+            color: black;
+
+            top: 11px;
+            left: -37px;
+
+            width: 34px;
+            height: 15px;
+
+            content: "\f060";
+            font-size: 4em;
+        }
+    }
+}

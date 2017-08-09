@@ -1,9 +1,15 @@
+// FRAMEWORK
 @import "framework/material.min.css";
+
+// FONTS
+@import "librarys/font-awesome/font-awesome";
 
 // custom
 @import "sass/mixins";
+@import "sass/general-rules";
 @import "sass/menu";
 @import "sass/generic-effects";
 @import "sass/handlers";
 @import "sass/grid";
 @import "sass/text";
+@import "sass/color-modify";

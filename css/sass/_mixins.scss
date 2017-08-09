@@ -8,3 +8,9 @@
     height: 15px;
     background: black;
 }
+
+@mixin transition {
+    -moz-transition:  all ease-in .5s;
+    -webkit-transition: all ease-in .5s; /* For Safari 3.1 to 6.0 */
+    transition:  all ease-in .5s;
+}

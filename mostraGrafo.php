@@ -89,7 +89,7 @@ require_once(dirname(__FILE__).'/sociograma.php');
 <link rel="stylesheet" href="/resources/demos/style.css">
 <link rel="stylesheet" href="/css/framework/jquery-ui.structure.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<!-- <script src="js/librarys/jquery-1.12.4.js"></script> -->
+<script src="js/framework/jquery-3.2.1.min.js"></script>
 <script src="js/framework/jquery-ui.min.js"></script>
 <script src="js/librarys/material.min.js"></script>
 
@@ -125,20 +125,20 @@ require_once(dirname(__FILE__).'/sociograma.php');
 
 		<!-- Menu comentado -->
 
-		<div id="tabs" style="background-color: #dedede">
-			<img id ="interrogacao" src="Imagens/interrogacao.png" style="display:none;">
-			<!-- <ul>
-				<li id="mapInt" class="mdl-button mdl-js-button  mdl-button--colored"><a href="#tabs-1">Mapa Interações</a></li>
-				<li id="mapCat" class="mdl-button mdl-js-button  mdl-button--colored"><a href="#tabs-2">Mapa Categorias</a></li>
-			</ul> -->
+	<div id="tabs" style="background-color: #dedede">
+		<img id ="interrogacao" src="Imagens/interrogacao.png" style="display:none;">
+		<!-- <ul>
+			<li id="mapInt" class="mdl-button mdl-js-button  mdl-button--colored"><a href="#tabs-1">Mapa Interações</a></li>
+			<li id="mapCat" class="mdl-button mdl-js-button  mdl-button--colored"><a href="#tabs-2">Mapa Categorias</a></li>
+		</ul>
 
-			<!-- <div>
-				<br>
-				<input type="button" value="Aumentar Mapa" OnClick="zoomClick(1.1)" />
-				<input type="button" value="Diminuir Mapa" OnClick="zoomClick(0.9)" />
-				<input type="button" value="Mapa Original" OnClick="zoomClick(0)" />
-				<button name="button" OnClick="zoomClick(1.1)"> coisas </button>
-			</div> -->
+		<div>
+			<br>
+			<input type="button" value="Aumentar Mapa" OnClick="zoomClick(1.1)" />
+			<input type="button" value="Diminuir Mapa" OnClick="zoomClick(0.9)" />
+			<input type="button" value="Mapa Original" OnClick="zoomClick(0)" />
+			<button name="button" OnClick="zoomClick(1.1)"> coisas </button>
+		</div> -->
 		<div id="tabs-1" style="width:100%; height:100%">
 
 		</div>
@@ -1261,4 +1261,7 @@ require_once(dirname(__FILE__).'/sociograma.php');
 // 	echo '</SCRIPT>';
 // }
 //$pagina->rodape();
+
 ?>
+
+<?php require_once( 'future/footer.php' ); ?>
