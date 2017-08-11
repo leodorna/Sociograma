@@ -1,7 +1,7 @@
   <!-- The drawer is always open in large screens. The header is always shown,
   even in small screens. -->
 
- <meta charset="UTF-8"> 
+ <meta charset="UTF-8">
 
   <div class="content-grid mdl-grid top-shadow inset-shadow">
       <div class="mdl-cell mdl-cell--12-col">
@@ -23,7 +23,8 @@
         <div class="content-grid mdl-grid">
             <div class="mdl-cell mdl-cell--6-col mdl-cell--middle no-margin">
                 <div class="place-box">
-                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+
+                    <span><a href="#"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a></span>
 
                     <h3>THINGS</h3>
                 </div>
@@ -33,7 +34,7 @@
                 </div>
             </div>
             <div class="mdl-cell mdl-cell--6-col mdl-textfield--align-right mdl-cell--middle">
-                <p class="no-margin">THING</p>
+                <p class="no-margin"><a href="#" id="config-drawer"><i class="fa fa-cog" aria-hidden="true"></i></a></p>
             </div>
         </div>
     </div>

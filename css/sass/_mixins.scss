@@ -10,7 +10,55 @@
 }
 
 @mixin transition {
-    -moz-transition:  all ease-in .5s;
-    -webkit-transition: all ease-in .5s; /* For Safari 3.1 to 6.0 */
-    transition:  all ease-in .5s;
+    -moz-transition:  all ease-in .3s;
+    -webkit-transition: all ease-in .3s; /* For Safari 3.1 to 6.0 */
+    transition:  all ease-in .3s;
+}
+
+@mixin transition-duration($time) {
+    -moz-transition-duration: $time;
+    -webkit-transition-duration: $time; /* For Safari 3.1 to 6.0 */
+    transition-duration: $time;
+}
+
+
+@mixin transform($transforms) {
+	   -moz-transform: $transforms;
+	     -o-transform: $transforms;
+	    -ms-transform: $transforms;
+	-webkit-transform: $transforms;
+          transform: $transforms;
+}
+
+// rotate
+@mixin rotate ($deg) {
+  @include transform(rotate(#{$deg}deg));
+}
+
+// scale
+@mixin scale($scale) {
+	 @include transform(scale($scale));
+}
+
+// translate
+@mixin translate ($x, $y) {
+   @include transform(translate($x, $y));
+}
+
+// skew
+@mixin skew ($x, $y) {
+   @include transform(skew(#{$x}deg, #{$y}deg));
+}
+
+// rotate-Z
+@mixin rotateZ ($deg) {
+  @include transform(rotateZ(#{$deg}deg));
+}
+//transform origin
+@mixin transform-origin ($origin) {
+    moz-transform-origin: $origin;
+	     -o-transform-origin: $origin;
+	    -ms-transform-origin: $origin;
+	-webkit-transform-origin: $origin;
+          transform-origin: $origin;
 }

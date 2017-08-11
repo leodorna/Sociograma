@@ -42,6 +42,17 @@
     }
 }
 
+#config-drawer {
+    color: white;
+    font-size: 35px;
+
+    &:hover {
+        i{
+            @include rotateZ(60);
+        }
+    }
+}
+
 @media all and (min-width: 990px ) {
     .mdl-layout__drawer-button {
         display: none;
@@ -53,23 +64,38 @@
 
     .place-box {
         position: relative;
-        font: normal normal normal 14px/1 FontAwesome;
-        text-rendering: auto;
 
-        &::before {
+        span {
             @include pseudElement();
 
             background: transparent;
-            color: black;
 
-            top: 11px;
+            top: 8px;
             left: -37px;
 
             width: 34px;
             height: 15px;
 
-            content: "\f060";
-            font-size: 4em;
+            font-size: 22px;
+            text-align: center;
+
+
+            i {
+                @include transition-duration(.2s);
+                color: #114B7D;
+
+                width: 100%;
+
+                &:hover {
+                    color: #002B50 !important;
+
+                    margin-top: -1px;
+                    font-size: 28px;
+
+                    // text-indent: -15px;
+                }
+            }
+
         }
     }
 }
