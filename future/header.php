@@ -3,21 +3,23 @@
 
  <meta charset="UTF-8">
 
-  <div class="content-grid mdl-grid top-shadow inset-shadow">
-      <div class="mdl-cell mdl-cell--12-col">
-          <div class="mdl-layout__header-row">
-              <div class="mdl-layout-spacer"></div>
-              <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
-                  <nav class="mdl-navigation grey-nav">
-                      <a class="mdl-navigation__link" href="">Acessibilidade</a>
-                      <a class="mdl-navigation__link" href="">Notificação</a>
-                      <a class="mdl-navigation__link" href="">Sair</a>
-                  </nav>
-              </div>
-          </div>
-      </div>
-  </div>
-<header class="mdl-layout__header">
+<div class="content-grid mdl-grid fixed-header">
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-layout__header-row">
+            <div class="mdl-layout-spacer"></div>
+
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+                <nav class="mdl-navigation grey-nav">
+                    <a class="mdl-navigation__link" href="">Acessibilidade</a>
+                    <a class="mdl-navigation__link" href="">Notificação</a>
+                    <a class="mdl-navigation__link" href="">Sair</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<header class="mdl-layout__header top-shadow inset-shadow">
     <div class="mdl-layout__header-row">
         <div class="mdl-layout-spacer"></div>
         <div class="content-grid mdl-grid">
@@ -39,8 +41,10 @@
         </div>
     </div>
 </header>
+
 <div class="mdl-layout__drawer drawer-space top-shadow inset-shadow">
-  <span class="mdl-layout-title">Title</span>
+    <span class="mdl-layout-title">Title</span>
+
     <nav class="mdl-navigation">
       <a class="mdl-navigation__link" href="">Link</a>
       <a class="mdl-navigation__link" href="">Link</a>
@@ -48,3 +52,16 @@
       <a class="mdl-navigation__link" href="">Link</a>
     </nav>
 </div>
+
+<div class="mdl-layout__drawer drawer-space right-drawer not-visible">
+    <span class="mdl-layout-title">Title</span>
+
+    <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+    </nav>
+</div>
+
+<!-- <div class="mdl-layout__obfuscator"></div> -->

@@ -4,7 +4,10 @@
     }
 }
 
-
+.fixed-header {
+    background: white;
+    z-index: 5;
+}
 
 .map-select {
     text-decoration: none;
@@ -20,11 +23,11 @@
         @include transition();
         @include pseudElement();
 
-        bottom: -5px;
+        bottom: -3px;
         left: 50%;
         top: unset;
 
-        height: 5px;
+        height: 4px;
         width: 0%;
 
         background: #B5D9E0;
@@ -96,6 +99,25 @@
                 }
             }
 
+        }
+    }
+
+    .right-drawer {
+        -moz-transform: translateX(0px)!important;
+        -o-transform: translateX(0px)!important;
+        -ms-transform: translateX(0px)!important;
+        -webkit-transform: translateX(0px)!important;
+        transform: translateX(0px)!important;
+
+        left: unset;
+        right: 0;
+
+        &.not-visible, &.is-visible {
+            -moz-transform: translateX(250px)!important;
+            -o-transform: translateX(250px)!important;
+            -ms-transform: translateX(250px)!important;
+            -webkit-transform: translateX(250px)!important;
+            transform: translateX(250px)!important;
         }
     }
 }
