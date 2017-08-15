@@ -304,7 +304,10 @@
 	} @else if $value == space-between {
 		-webkit-box-pack: justify;
 		-ms-flex-pack: justify;
-	} @else if $value == space-around {
+	} @else if $value == center {
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+    } @else if $value == space-around {
 		-ms-flex-pack: distribute;
 	} @else {
 		-webkit-box-pack: $value;
@@ -397,4 +400,12 @@
 		-ms-flex-line-pack: $value;
 	}
 	align-content: $value;
+}
+
+@mixin border-radius($rad: 50px 50px 50px 50px) {
+    -moz-border-radius: $rad;
+      -o-border-radius: $rad;
+     -ms-border-radius: $rad;
+ -webkit-border-radius: $rad;
+       border-radius: $rad;
 }

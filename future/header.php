@@ -43,7 +43,27 @@
 </header>
 
 <div class="mdl-layout__drawer drawer-space top-shadow inset-shadow">
-    <span class="mdl-layout-title">Title</span>
+    <!-- <span class="mdl-layout-title">Title</span> -->
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--middle mdl-cell--12-col center-items">
+            <div class="user-img">
+                <img src="Imagens/temp/obama.jpg" alt="">
+            </div>
+
+            <div class="custom-select" id="profile-status">
+                <div class="selected" data-from="profile-status">
+                    <p><span class="profile-status-color"></span><span>Ocupado</span></p>
+                </div>
+                <div class="options">
+                    <ul class='mdl-list'>
+                        <li class="mdl-list__item" data-status=""></li>
+                        <li class="mdl-list__item" data-status=""></li>
+                        <li class="mdl-list__item" data-status=""></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <nav class="mdl-navigation">
       <a class="mdl-navigation__link" href="">Link</a>

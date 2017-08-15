@@ -56,6 +56,20 @@
     }
 }
 
+.user-img {
+    width: 130px;
+    height: 130px;
+
+    @include border-radius(50% 50% 50% 50%);
+
+    overflow: hidden;
+    border: 1px solid #b0bec5;
+
+    text-align: center;
+
+    margin-top: 15px;
+}
+
 @media all and (min-width: 990px ) {
     .mdl-layout__drawer-button {
         display: none;
