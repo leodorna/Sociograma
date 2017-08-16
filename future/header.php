@@ -44,24 +44,30 @@
 
 <div class="mdl-layout__drawer drawer-space top-shadow inset-shadow">
     <!-- <span class="mdl-layout-title">Title</span> -->
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--middle mdl-cell--12-col center-items">
-            <div class="user-img">
-                <img src="Imagens/temp/obama.jpg" alt="">
+    <div class="mdl-grid center-items">
+        <div class="mdl-cell mdl-cell--middle  user-img">
+            <img src="Imagens/temp/obama.jpg" alt="">
+        </div>
+        
+        <div class="custom-select" id="profile-status">
+            <div class="selected" data-from="profile-status">
+                <p>
+                    <span class="profile-status-color"></span><span>Ocupado</span>
+                    <button id="demo-menu-lower-right"
+                        class="mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+                </p>
             </div>
 
-            <div class="custom-select" id="profile-status">
-                <div class="selected" data-from="profile-status">
-                    <p><span class="profile-status-color"></span><span>Ocupado</span></p>
-                </div>
-                <div class="options">
-                    <ul class='mdl-list'>
-                        <li class="mdl-list__item" data-status=""></li>
-                        <li class="mdl-list__item" data-status=""></li>
-                        <li class="mdl-list__item" data-status=""></li>
-                    </ul>
-                </div>
-            </div>
+            <!-- Right aligned menu below button -->
+            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                for="demo-menu-lower-right">
+              <li class="mdl-menu__item">Some Action</li>
+              <li class="mdl-menu__item">Another Action</li>
+              <li disabled class="mdl-menu__item">Disabled Action</li>
+              <li class="mdl-menu__item">Yet Another Action</li>
+            </ul>
         </div>
     </div>
 

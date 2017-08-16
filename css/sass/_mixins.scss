@@ -402,7 +402,7 @@
 	align-content: $value;
 }
 
-@mixin border-radius($rad: 50px 50px 50px 50px) {
+@mixin border-radius($rad: 50% 50% 50% 50%) {
     -moz-border-radius: $rad;
       -o-border-radius: $rad;
      -ms-border-radius: $rad;

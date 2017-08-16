@@ -116,6 +116,12 @@
         }
     }
 
+    .custom-select {
+        width: 220px;
+
+        @include justify-content(center);
+    }
+
     .right-drawer {
         -moz-transform: translateX(0px)!important;
         -o-transform: translateX(0px)!important;
@@ -133,5 +139,17 @@
             -webkit-transform: translateX(250px)!important;
             transform: translateX(250px)!important;
         }
+    }
+
+    .profile-status-color {
+        width: 15px;
+        height: 15px;
+
+        background-color: red;
+
+        display: inline-flex;
+        vertical-align: middle;
+
+        @include border-radius();
     }
 }
