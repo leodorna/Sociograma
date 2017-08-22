@@ -125,9 +125,9 @@ require_once(dirname(__FILE__).'/sociograma.php');
 
 		<!-- Menu comentado -->
 
-	<div id="tabs" style="background-color: #dedede">
+	<!-- <div id="tabs" style="background-color: #dedede">
 		<img id ="interrogacao" src="Imagens/interrogacao.png" style="display:none;">
-		<!-- <ul>
+		<ul>
 			<li id="mapInt" class="mdl-button mdl-js-button  mdl-button--colored"><a href="#tabs-1">Mapa Interações</a></li>
 			<li id="mapCat" class="mdl-button mdl-js-button  mdl-button--colored"><a href="#tabs-2">Mapa Categorias</a></li>
 		</ul>
@@ -138,7 +138,7 @@ require_once(dirname(__FILE__).'/sociograma.php');
 			<input type="button" value="Diminuir Mapa" OnClick="zoomClick(0.9)" />
 			<input type="button" value="Mapa Original" OnClick="zoomClick(0)" />
 			<button name="button" OnClick="zoomClick(1.1)"> coisas </button>
-		</div> -->
+		</div>
 		<div id="tabs-1" style="width:100%; height:100%">
 
 		</div>
@@ -159,11 +159,11 @@ require_once(dirname(__FILE__).'/sociograma.php');
 				<p id="textBox" style="color:white;font-size:16px;margin:10; font-weight: 400">
 				</p>
 			</div>
-				<div id="buttons" style="position:absolute; top:350; left:30; width: 20; height:400;">
-				</div>
+			<div id="buttons" style="position:absolute; top:350; left:30; width: 20; height:400;">
+			</div>
 		</div>
-	</div>
-	<!-- </div> -->
+	</div> -->
+
 	<script type="text/javascript" src="js/json/links.json"></script>
 	<script type="text/javascript" src="js/json/edges.json"></script>
 	<script type="text/javascript" src="js/json/nodes.json"></script>

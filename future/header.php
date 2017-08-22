@@ -30,7 +30,7 @@
 
                     <h3>THINGS</h3>
                 </div>
-                <div id="tabs">
+                <div>
                     <a id="mapInt" class="map-select active" href="#"><span>Interações sociais</span></a>
                     <a id="mapCat" class="map-select" href="#"><span>categorias de informação social</span></a>
                 </div>
@@ -48,7 +48,7 @@
         <div class="mdl-cell mdl-cell--middle  user-img">
             <img src="Imagens/temp/obama.jpg" alt="">
         </div>
-        
+
         <div class="custom-select" id="profile-status">
             <div class="selected" data-from="profile-status">
                 <p>
