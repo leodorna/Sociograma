@@ -8,6 +8,7 @@
         <div id="tabs-2" style="padding:4pt">
             <form style="margin:0;">
                 <select style="margin:0;font-size:14pt;" id="Selecao">
+                    <option disabled selected="selected" value="0">selecionar categorias</option>
                     <option value="0">Todas</option>
                     <option value="5">Agrupamento</option>
                     <option value="2">Ausência</option>
