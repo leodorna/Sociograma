@@ -30,9 +30,10 @@
 
                     <h3>THINGS</h3>
                 </div>
-                <div id="tabs">
-                    <a id="mapInt tabs-1" class="map-select active" href="#"><span>Interações sociais</span></a>
-                    <a id="mapCat tabs-2" class="map-select" href="#"><span>categorias de informação social</span></a>
+
+                <div>
+                    <a id="mapInt" class="map-select active" href="#"><span>Interações sociais</span></a>
+                    <a id="mapCat" class="map-select" href="#"><span>categorias de informação social</span></a>
                 </div>
             </div>
             <div class="mdl-cell mdl-cell--6-col mdl-textfield--align-right mdl-cell--middle">

@@ -159,11 +159,11 @@ require_once(dirname(__FILE__).'/sociograma.php');
 				<p id="textBox" style="color:white;font-size:16px;margin:10; font-weight: 400">
 				</p>
 			</div>
-				<div id="buttons" style="position:absolute; top:350; left:30; width: 20; height:400;">
-				</div>
+			<div id="buttons" style="position:absolute; top:350; left:30; width: 20; height:400;">
+			</div>
 		</div>
 	</div> -->
-	<!-- </div> -->
+	
 	<script type="text/javascript" src="js/json/links.json"></script>
 	<script type="text/javascript" src="js/json/edges.json"></script>
 	<script type="text/javascript" src="js/json/nodes.json"></script>

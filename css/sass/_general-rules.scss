@@ -2,6 +2,10 @@
     box-sizing: border-box;
 
     @include transition();
+
+    *:disabled {
+        display: none; 
+    }
 }
 
 img {
