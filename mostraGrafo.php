@@ -92,8 +92,6 @@ require_once(dirname(__FILE__).'/sociograma.php');
 <script src="js/framework/jquery-3.2.1.min.js"></script>
 <script src="js/framework/jquery-ui.min.js"></script>
 <script src="js/librarys/material.min.js"></script>
-
-<!-- <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-red.min.css" /> -->
 <link rel="stylesheet" href="css/general.css">
 
 <script src="tabela.js"></script>
@@ -163,7 +161,7 @@ require_once(dirname(__FILE__).'/sociograma.php');
 			</div>
 		</div>
 	</div> -->
-	
+
 	<script type="text/javascript" src="js/json/links.json"></script>
 	<script type="text/javascript" src="js/json/edges.json"></script>
 	<script type="text/javascript" src="js/json/nodes.json"></script>
