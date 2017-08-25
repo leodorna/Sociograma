@@ -71,9 +71,11 @@
 }
 
 #Selecao {
+    width: 0;
     opacity: 0;
 
-    &.active {        
+    &.active{
+        width: auto;
         opacity: 1;
     }
 }
