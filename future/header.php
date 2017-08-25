@@ -3,22 +3,6 @@
 
  <meta charset="UTF-8">
 
-<div class="content-grid mdl-grid fixed-header">
-    <div class="mdl-cell mdl-cell--12-col">
-        <div class="mdl-layout__header-row">
-            <div class="mdl-layout-spacer"></div>
-
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
-                <nav class="mdl-navigation grey-nav">
-                    <a class="mdl-navigation__link" href="">Acessibilidade</a>
-                    <a class="mdl-navigation__link" href="">Notificação</a>
-                    <a class="mdl-navigation__link" href="">Sair</a>
-                </nav>
-            </div>
-        </div>
-    </div>
-</div>
-
 <header class="mdl-layout__header top-shadow inset-shadow">
     <div class="mdl-layout__header-row">
         <div class="mdl-layout-spacer"></div>
@@ -28,7 +12,7 @@
 
                     <span><a href="#"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a></span>
 
-                    <h3>THINGS</h3>
+                    <h3>Mapa social</h3>
                 </div>
 
                 <div>
