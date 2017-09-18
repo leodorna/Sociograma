@@ -100,8 +100,7 @@ require_once(dirname(__FILE__).'/sociograma.php');
     $( "#tabs" ).tabs();
   } );
 </script>
-<div class="mdl-layout mdl-js-layout  mdl-layout--fixed-drawer
-            mdl-layout--fixed-header">
+<div class="mdl-layout mdl-js-layout">
 	<div id = "modal">
 		<div id="closeModal">X</div>
 		Aqui vai o Relatório e o link para abrir um pdf.
