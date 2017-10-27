@@ -159,7 +159,7 @@ Portanto:</p>
 
 
 
-   <?/* 
+   <?php/* 
      function printEstrategias($estrategias){
        echo "'".$estrategias[0]['Estrategias']."'";
         for($i = 1; $i < 6; $i++){
