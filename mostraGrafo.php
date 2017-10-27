@@ -1,4 +1,4 @@
-<?php
+<?php/* 
 require_once(dirname(__FILE__).'/../sistema.inc.php');
 require_once(dirname(__FILE__).'/sociograma.php');
 $pagina=new Pagina();
@@ -72,7 +72,7 @@ if(isset($_POST['relwebfolio']))
 //$pagina->cabecalho('MapaSocial');
 
 if((count($_POST['checkboxMembros']) != 0 || count($_POST['checkboxGrupos']) != 0) && !($interacaoContatos==0 && $interacaoBatepapo==0 && $interacaoForum==0 && $interacaoBiblioteca==0 && $interacaoA2==0 && $interacaoWebfolio==0)) {
-
+ */
 ?>
 <!--Gera a imagem do mapa social, passando os parâmetros pelo link-->
 <link rel="stylesheet" type="text/css" href= "mostragrafo.css">
@@ -159,7 +159,7 @@ Portanto:</p>
 
 
 
-   <?
+   <?/* 
      function printEstrategias($estrategias){
        echo "'".$estrategias[0]['Estrategias']."'";
         for($i = 1; $i < 6; $i++){
@@ -213,7 +213,7 @@ Portanto:</p>
      echo "var dadosRelatorio = {'turma':".$pagina->sessao->codTurma.", 'pesoBP':".$interacaoBatepapo.", 'pesoWF':".$interacaoWebfolio.", 'pesoCo': ".$interacaoContatos.", 'pesoA2': ".$interacaoA2.", 'pesoFo':".$interacaoForum.", 'pesoBib': ".$interacaoBiblioteca.", 'mediaPop': 0, 'mediaPopTurma': 0};"; 
 
      $sociograma=new Sociograma($codUsuario,$codTurma,$layout,$directed,$dataInicio,$dataFim,$corAluno,$corProfessor,$corMonitor,$interacaoContatos,$interacaoBatepapo,$interacaoForum,$interacaoBiblioteca,$interacaoA2,$interacaoWebfolio,$arrayMembros,$arrayGrupos);
-   ?>
+    */?>
 
 
 updateLinks(nodes, edges, links)
@@ -831,7 +831,7 @@ d3.select("#closeHelp").on("click", function(d){
 
 </body>
 
-<?php
+<?php/* 
 }else if($interacaoContatos==0 && $interacaoBatepapo==0 && $interacaoForum==0 && $interacaoBiblioteca==0 && $interacaoA2==0 && $interacaoWebfolio==0) {
 	echo '<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">';
 	echo 'alert ("Nenhum n\u00edvel de relev\u00e2ncia atribu\u00eddo.")';
@@ -840,7 +840,7 @@ d3.select("#closeHelp").on("click", function(d){
 	echo '<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">';
 	echo 'alert ("Nenhum membro ou grupo selecionado.")';
 	echo '</SCRIPT>';
-}
+} */
 //$pagina->rodape();
 
 require_once( 'future/footer.php' );
