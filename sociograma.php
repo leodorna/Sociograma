@@ -20,6 +20,7 @@ class Sociograma{
 	private $dadosMembros;
 	private $imageGraphviz;
 	private $arrayInteracoes;
+	private $arrayInteracoesTurma;
 	private $corAluno;
 	private $corProfessor;
 	private $corMonitor;
@@ -31,6 +32,7 @@ class Sociograma{
 	private $interacaoWebfolio;
 	private $arrayIsolados;
 	private $alunosTurma;
+	private $codGrupo;
 	public function __construct($codUsuario,$codTurma,$layout,$directed,$dataInicio,$dataFim,$corAluno,$corProfessor,$corMonitor,$interacaoContatos,$interacaoBatepapo,$interacaoForum,$interacaoBiblioteca,$interacaoA2,$interacaoWebfolio,$arrayMembros=NULL,$arrayGrupos=NULL)
 	{
 		$this->codUsuario=$codUsuario;
@@ -48,9 +50,8 @@ class Sociograma{
 		$this->membros = $arrayMembros;
 		$this->alunosTurma = array();
 		$this->dadosColabora = array(array());
-
-
 		$this->dadosMembros=array(array());
+		$this->arrayGrupos = $arrayGrupos;
 		if(!empty($arrayMembros))
 			$this->pegaDadosMembros($arrayMembros);
 
@@ -82,19 +83,13 @@ class Sociograma{
 						$this->dadosMembros[$codUsuario]['codUsuario']=$codUsuario;
 						$this->dadosMembros[$codUsuario]['nome']=$part['nome'];
 						$this->dadosMembros[$codUsuario]['associacao']=$part['associacao'];
-						$this->dadosMembros[$codUsuario]['InteForum']= 0;
-						$this->dadosMembros[$codUsuario]['InteBP']= 0;
-						$this->dadosMembros[$codUsuario]['InteWF']= 0;
-						$this->dadosMembros[$codUsuario]['InteBib']= 0;
-						$this->dadosMembros[$codUsuario]['InteCO']= 0;
-						$this->dadosMembros[$codUsuario]['InteA2']= 0;
 						$this->dadosMembros[$codUsuario]['ColabForum'] = 0;		//para salvar alguma soma, por exemplo, no calculo da colaboração
 						$this->dadosMembros[$codUsuario]['ColabBP'] = 0;
 						$this->dadosMembros[$codUsuario]['ColabWF'] = 0;
 						$this->dadosMembros[$codUsuario]['ColabBib'] = 0;
 						$this->dadosMembros[$codUsuario]['calcA2'] = 0;
 						$this->dadosMembros[$codUsuario]['calcCO'] = 0;
-						$this->dadosMembros[$codUsuario]['Colab'] = 0;
+						$this->dadosMembros[$codUsuario]['colab'] = 0;
 
 						$i++;
 					}
@@ -106,21 +101,33 @@ class Sociograma{
 		$this->membros = $arrayMembros;
 
 		if($this->podeVisualizar()){
+			$arrayDados = array(array());
 			$this->corAluno='#'.$corAluno;
 			$this->corProfessor='#'.$corProfessor;
 			$this->corMonitor='#'.$corMonitor;
-			$this->desenhaNodos();
-			$this->contabilizaInteracoes($interacaoContatos,$interacaoBatepapo,$interacaoForum,$interacaoBiblioteca,$interacaoA2,$interacaoWebfolio);
+			
+			if(empty($arrayGrupos)){
+				$this->contabilizaInteracoes($interacaoContatos,$interacaoBatepapo,$interacaoForum,$interacaoBiblioteca,$interacaoA2,$interacaoWebfolio);
+				$this->desenhaNodos();
+
+			}else{
+				$this->contabilizaInteracoesGrupo($interacaoContatos,$interacaoBatepapo,$interacaoForum,$interacaoBiblioteca,$interacaoA2,$interacaoWebfolio);
+				$this->desenhaNodosGrupo();
+			}
 
 			$agrupamento = new Grupo($this->arrayInteracoes);
 			$agrupamento->BronKerbosch(array(), $this->getArrayMembrosComInteiros(), array());
 			$agrupamento->toJavascriptArray($this->alunosTurma);
 
+			$popularidadeTurma = new Popularidade($this->arrayInteracoesTurma);
+			$popularidadeTurma->calculaPopularidadeTurma();
+			$popularidadeTurma->toJavascriptArrayTurma($this->alunosTurma);
+
 			$popularidade = new Popularidade($this->arrayInteracoes);
 			$popularidade->calculaPopularidadeTurma();
 			$popularidade->toJavascriptArray($this->alunosTurma);
 
-			escreveInteracoes($this->arrayInteracoes, $this->alunosTurma);
+			escreveInteracoes($this->arrayInteracoesTurma, $this->alunosTurma);
 
 		}else {
 			echo '<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">';
@@ -128,6 +135,17 @@ class Sociograma{
 			echo '</SCRIPT>';
 		}
 	}
+
+	public function identificacaoRelatorio($user, $turma){
+		$dadosUser = $this->dadosMembros[$user];
+
+		$pesquisaTurma = db_busca('SELECT codDisciplina, nomeTurma FROM Turma WHERE codTurma="'.$turma.'"');
+		$pesquisaDisciplina = db_busca('SELECT nomeDisciplina FROM Disciplina WHERE codDisciplina="'.$pesquisaTurma[0]['codDisciplina'].'"');
+
+		echo "<p>Aluno: ".$dadosUser['nome']."</p>";
+		echo "<p>Atividade de Ensino: ".$pesquisaDisciplina[0]['nomeDisciplina']."</p>";
+		echo "<p>Turma: ".$pesquisaTurma[0]['nomeTurma']."</p>";
+	} 
 
 	private function defineDirected(){
 		/*if($this->layout==='dot')   //Modo "dot" retirado do mapa social
@@ -170,24 +188,26 @@ class Sociograma{
 			$this->dataFim=DATA_FIM_PADRAO;
 		}
 	}
-
+	private function contabilizaInteracoesGrupo(){
+		//para pegar do forum, por exemplo, temos que, para cada codGrupo contido em $arrayGrupos pegar os topicos cujo codForum AND codGrupo batem.
+	}
 	private function contabilizaInteracoes($interacaoContatos,$interacaoBatepapo,$interacaoForum,$interacaoBiblioteca,$interacaoA2,$interacaoWebfolio){
+
 		$this->arrayInteracoes= array(array());  //array com as chaves
+		$this->arrayInteracoesTurma = array(array());
 
 		if($interacaoContatos)
-		$this->analisaContatos($interacaoContatos);
+			$this->analisaContatos($interacaoContatos);
 		if($interacaoBatepapo)
-		$this->analisaBatepapo($interacaoBatepapo);
+			$this->analisaBatepapo($interacaoBatepapo);
 		if($interacaoForum)
-		$this->analisaForum($interacaoForum);
+			$this->analisaForum($interacaoForum);
 		if($interacaoBiblioteca)
-		$this->analisaBiblioteca($interacaoBiblioteca);
+			$this->analisaBiblioteca($interacaoBiblioteca);
 		if($interacaoA2)
-		$this->analisaA2($interacaoA2);
+			$this->analisaA2($interacaoA2);
 		if($interacaoWebfolio)
-		$this->analisaWebfolio($interacaoWebfolio);
-		//$this->procuraSolitarios();
-		//$this->ajustaInteracoes();
+			$this->analisaWebfolio($interacaoWebfolio);
 	}
 
 
@@ -201,7 +221,7 @@ class Sociograma{
 										ORDER BY id_mensagem');
 
 		foreach($pesquisaMensagens as $mensagem){
-			$idRemetente=($mensagem['id_remetente']);
+			$AlunoInterage=($mensagem['id_remetente']);
 			$idMensagem=($mensagem['id_mensagem']);
 			//$idMensagemCitada=($mensagem['id_citada']);
 			$idRemetenteCitada=0;
@@ -210,9 +230,19 @@ class Sociograma{
 												FROM c_mensagem_destinatario
 												WHERE id_mensagem="'.$idMensagem.'"');
 			foreach($pesquisaDestinatarios as $destinatario){
-				$idDestinatario=($destinatario['id_destinatario']);
+				$AlunoInteragido=($destinatario['id_destinatario']);
 
-				$this->incrementa_interacao($idRemetente, $idDestinatario, $interacaoContatos_2);
+				if(!in_array($AlunoInterage, $this->alunosTurma) || !in_array($AlunoInteragido, $this->alunosTurma))
+					continue;
+
+				$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'COTurma');
+				$this->incrementa_interacaoTurma($AlunoInterage, $AlunoInteragido, $interacaoContatos_2);
+
+				if(!in_array($AlunoInterage, $this->membros) || !in_array($AlunoInteragido, $this->membros))
+					continue;
+
+				$this->incrementa_interacao($AlunoInterage, $AlunoInteragido, $interacaoContatos_2);
+				$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'CO');
 			}
 		}
 	}
@@ -246,8 +276,17 @@ class Sociograma{
 				$AlunoInterage = $sociais['codUsuario'];	//alunointerage é quem mandou a msg
 				$AlunoInteragido = $sociais['destino'];		//o alunointeragido é o destino e vai receber a setinha
 
+				if(!in_array($AlunoInterage, $this->alunosTurma) || !in_array($AlunoInteragido, $this->alunosTurma))
+					continue;
 
+				$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'BPTurma');
+				$this->incrementa_interacaoTurma($AlunoInterage, $AlunoInteragido, $interacaoBatepapoPvt);
+
+				if(!in_array($AlunoInterage, $this->membros) || !in_array($AlunoInteragido, $this->membros))
+					continue;
+				
 				$this->incrementa_interacao($AlunoInterage, $AlunoInteragido, $interacaoBatepapoPvt);
+				$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'BP');
 
 			}
 		}
@@ -278,18 +317,28 @@ class Sociograma{
 
 				$primeiraMensagem_Forum=TRUE;
 				foreach($pesquisaMensagensForum as $mensagem){
-					$autorMensagem=intval($mensagem['codUsuario']);
+					$AlunoInterage=intval($mensagem['codUsuario']);
 					$mensagemCitada=intval($mensagem['citou']);
-					$autorMensagemCitada=0;
+					$AlunoInteragido=0;
 					if($mensagemCitada!==0){
 						$pesquisaMensagemCitada=db_busca('	SELECT codUsuario
 															FROM ForumMensagem
 															WHERE codMensagem="'.$mensagemCitada.'"
 															LIMIT 1');
 						if(count($pesquisaMensagemCitada)===1){
-							$autorMensagemCitada=intval($pesquisaMensagemCitada[0]['codUsuario']);
+							$AlunoInteragido=intval($pesquisaMensagemCitada[0]['codUsuario']);
+							
+							if(!in_array($AlunoInterage, $this->alunosTurma) || !in_array($AlunoInteragido, $this->alunosTurma))
+								continue;
 
-							$this->incrementa_interacao($autorMensagem, $autorMensagemCitada, $interacaoForum_1);
+							$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'ForumTurma');
+							$this->incrementa_interacaoTurma($AlunoInterage, $AlunoInteragido, $interacaoForum_1);
+				
+							if(!in_array($AlunoInterage, $this->membros) || !in_array($AlunoInteragido, $this->membros))
+								continue;
+
+							$this->incrementa_interacao($AlunoInterage, $AlunoInteragido, $interacaoForum_1);
+							$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'Forum');
 						}
 					}
 
@@ -321,11 +370,20 @@ class Sociograma{
 			$primeiroComentario_Biblioteca=TRUE;
 			foreach($pesquisaComentadorBiblioteca as $comentador)
 			{
-				$meninoComentador = $comentador['codUsuario'];
-				$meninoPostador = $material['codUsuario'];
+				$AlunoInterage = $comentador['codUsuario'];
+				$AlunoInteragido = $material['codUsuario'];
 
+				if(!in_array($AlunoInterage, $this->alunosTurma) || !in_array($AlunoInteragido, $this->alunosTurma))
+					continue;
 
-				$this->incrementa_interacao($meninoComentador, $meninoPostador, $interacaoBiblioteca_1);
+				$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'BibTurma');
+				$this->incrementa_interacaoTurma($AlunoInterage, $AlunoInteragido, $interacaoBiblioteca_1);
+
+				if(!in_array($AlunoInterage, $this->membros) || !in_array($AlunoInteragido, $this->membros))
+					continue;
+				
+				$this->incrementa_interacao($AlunoInterage, $AlunoInteragido, $interacaoBiblioteca_1);
+				$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'Bib');
 
 			}
 		}
@@ -341,7 +399,7 @@ class Sociograma{
 											//pega os codUsuarios da Turma escolhida na tabela TurmaUsuario
 		foreach($pesquisaUsuariosTurma as $Aluno1) //daí pra cada aluno encontrado buscar uma interação com um segundo aluno.
 		{
-			$alunoEnviador = $Aluno1['codUsuario'];
+			$AlunoInterage = $Aluno1['codUsuario'];
 
 			$Pesquisa_Aluno2 = db_busca('SELECT codUsuario2
 								FROM A2
@@ -350,9 +408,19 @@ class Sociograma{
 								ORDER BY codUsuario2 ASC');
 			foreach($Pesquisa_Aluno2 as $aluno2)
 			{
-				$alunoRecebedor = $aluno2['codUsuario2'];
+				$AlunoInteragido = $aluno2['codUsuario2'];
 
-				$this->incrementa_interacao($alunoEnviador, $alunoRecebedor, $interacaoA2);
+				if(!in_array($AlunoInterage, $this->alunosTurma) || !in_array($AlunoInteragido, $this->alunosTurma))
+					continue;
+
+				$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'A2Turma');
+				$this->incrementa_interacaoTurma($AlunoInterage, $AlunoInteragido, $interacaoA2);
+
+				if(!in_array($AlunoInterage, $this->membros) || !in_array($AlunoInteragido, $this->membros))
+					continue;
+
+				$this->incrementa_interacao($AlunoInterage, $AlunoInteragido, $interacaoA2);
+				$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'A2');
 
 			}
 		}
@@ -376,52 +444,26 @@ class Sociograma{
 			foreach($pesquisaComentadores as $aluninhos)
 			{
 
-				$comentador = $aluninhos['codUsuario'];
-				$postador = $files['codUsuario'];
+				$AlunoInterage = $aluninhos['codUsuario'];
+				$AlunoInteragido = $files['codUsuario'];
 
-				$this->incrementa_interacao($comentador, $postador, $interacaoWebfolio);
 
+				if(!in_array($AlunoInterage, $this->alunosTurma) || !in_array($AlunoInteragido, $this->alunosTurma))
+					continue;
+
+				$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'WFTurma');
+				$this->incrementa_interacaoTurma($AlunoInterage, $AlunoInteragido, $interacaoWebfolio);
+
+				if(!in_array($AlunoInterage, $this->membros) || !in_array($AlunoInteragido, $this->membros))
+					continue;
+				$this->incrementa_interacao($AlunoInterage, $AlunoInteragido, $interacaoWebfolio);
+				$this->incrementaIntensidade($AlunoInterage, $AlunoInteragido, 'WF');
 			}
 		}
 
 
 	}
 
-	private function ajustaInteracoes(){
-
-
-		if($this->directed){
-			foreach($this->arrayInteracoes as $usuario1=>$interacao){
-				if(isset($this->dadosMembros[$usuario1])){
-					foreach($interacao as $usuario2=>$forcaInteracao){
-						if((!isset($this->dadosMembros[$usuario2]))||($usuario1===$usuario2))
-							unset($this->arrayInteracoes[$usuario1][$usuario2]);
-					}
-				}
-				else
-					unset($this->arrayInteracoes[$usuario1]);
-			}
-		}
-		else{
-			foreach($this->arrayInteracoes as $usuario1=>$interacao){
-				if(isset($this->dadosMembros[$usuario1])){
-					foreach($interacao as $usuario2=>$forcaInteracao){
-						if((!isset($this->dadosMembros[$usuario2]))||($usuario1===$usuario2))
-							unset($this->arrayInteracoes[$usuario1][$usuario2]);
-						else{
-							if(isset($this->arrayInteracoes[$usuario2][$usuario1])){
-								$this->arrayInteracoes[$usuario1][$usuario2]+=$this->arrayInteracoes[$usuario2][$usuario1];
-								unset($this->arrayInteracoes[$usuario2][$usuario1]);
-							}
-						}
-					}
-				}
-				else
-					unset($this->arrayInteracoes[$usuario1]);
-			}
-		}
-
-	}
 
 	private function podeVisualizar(){	//define se o usuário pode visualisar o mapa social
 		$pesquisaAssociacao=db_busca('	SELECT associacao
@@ -451,127 +493,7 @@ class Sociograma{
 		*/
 	}
 
-	public function veIntensidade()
-	{
-		//FORUM
-			$CodForum = db_busca('SELECT codForum FROM Forum WHERE codTurma="'.$this->codTurma.'"');
-
-			$buscaForum= db_busca('SELECT codForum
-								 	 FROM Forum
-								 	 WHERE codTurma="'.$this->codTurma.'"');
-			foreach($buscaForum as $Forumzinho)
-			{
-				$buscaTopico = db_busca('SELECT codTopico FROM ForumTopico WHERE codForum = "'.$Forumzinho['codForum'].'"');
-				foreach($buscaTopico as $topico)
-				{
-					$buscaMensagens = db_busca('SELECT codUsuario, ncitadas FROM ForumMensagem
-												 WHERE (codTopico="'.$topico['codTopico'].'" AND
-															DATE(hora) BETWEEN "'.$this->dataInicio.'" AND "'.$this->dataFim.'")
-													ORDER BY codMensagem ASC');
-					foreach($buscaMensagens as $mensagem)
-					{
-						$user = $mensagem['codUsuario'];
-						$this->dadosMembros[$user]['InteForum'] += (intval($mensagem['ncitadas'])+1);
-					}
-				}
-			}
- 		//Biblioteca
-		$codMaterial =	db_busca('SELECT codMaterial, codUsuario FROM BibliotecaMaterial WHERE codTurma="'.$this->codTurma.'"');
-
-		foreach ($codMaterial as $material)
-		{
-			$user = $material['codUsuario'];
-			$this->dadosMembros[$user]['InteBib'] += 1;
-		}
-
-		//A2
-		$pesquisaUsuariosTurma = db_busca('   SELECT codUsuario
-												FROM TurmaUsuario
-												WHERE codTurma="'.$this->codTurma.'"
-												ORDER BY codUsuario ASC');
-
-		foreach($pesquisaUsuariosTurma as $Aluno1)
-		{
-			$user = $Aluno1['codUsuario'];
-
-			$Pesquisa_Aluno2 = db_busca('SELECT codUsuario2
-								FROM A2
-								WHERE ( codUsuario1="'.intval($user).'" AND
-								DATE(quando) BETWEEN "'.$this->dataInicio.'" AND "'.$this->dataFim.'")
-								ORDER BY codUsuario2 ASC');
-			foreach($Pesquisa_Aluno2 as $Aluno2)
-			{
-				$alunoRecebedor = $Aluno2['codUsuario2'];
-				if(in_array($alunoRecebedor, $this->alunosTurma))
-				{
-					$this->dadosMembros[$user]['InteA2'] += 1;
-				}
-			}
-		}
-
-		//BATE-PAPO
-		$Pesquisa_salas = db_busca('SELECT codSala							/*Tem que pegar todas salas de bate papo contidas*/
-									FROM BatePapoSala						/*na turma de análise*/
-									WHERE codTurma="'.$this->codTurma.'"
-									ORDER BY codSala ASC');
-
-		foreach($Pesquisa_salas as $salas)
-		{
-
-			$PesquisaAlunos = db_busca('SELECT codUsuario, destino 		/*Agora é preciso pegar todos usuarios e destinos*/
-										FROM BatePapoMensagem
-										WHERE (codSala="'.intval($salas['codSala']).'" AND
-												DATE(quando) BETWEEN "'.$this->dataInicio.'" AND "'.$this->dataFim.'")
-										ORDER BY codUsuario ASC');
-
-			foreach($PesquisaAlunos as $Aluno)
-			{
-				$user = $Aluno['codUsuario'];
-				if($Aluno['destino'] != 0)			//destino == 0 significa que mandou msg pra todos, isso não conta.
-				$this->dadosMembros[$user]['InteBP'] += 1;
-			}
-		}
-
-		//CONTATOS
-		$PesquisaContatos = db_busca('SELECT id_mensagem, id_remetente
-									  FROM c_mensagem
-									  WHERE (	id_turma="'.$this->codTurma.'" AND
-												DATE(data_hora) BETWEEN "'.$this->dataInicio.'" AND "'.$this->dataFim.'")
-										ORDER BY id_mensagem');
-		foreach($PesquisaContatos as $dado)
-		{
-			$mensagem = $dado['id_mensagem'];
-			$user = $dado['id_remetente'];
-			$pesquisaDestinatarios=db_busca('	SELECT id_destinatario
-												FROM c_mensagem_destinatario
-												WHERE id_mensagem="'.$mensagem.'"');
-			foreach($pesquisaDestinatarios as $receivers)
-			{
-				$this->dadosMembros[$user]['InteCO'] +=1;
-			}
-		}
-
-		//WF
-		$pesquisaArquivosTurma = db_busca(' SELECT codArquivo
-											FROM WFArquivo
-											WHERE codTurma= "'.$this->codTurma.'"
-											ORDER BY codArquivo ASC');
-		foreach($pesquisaArquivosTurma as $files)
-		{
-			$pesquisaComentarios = 	db_busca(' SELECT codUsuario FROM WFComentario
-												WHERE ( codArquivo="'.intval($files['codArquivo']).'" AND
-												DATE(quando) BETWEEN "'.$this->dataInicio.'" AND "'.$this->dataFim.'")
-												ORDER BY codUsuario ASC');
-			foreach($pesquisaComentarios as $users)
-			{
-				$user = $users['codUsuario'];
-				$this->dadosMembros[$user]['InteWF'] +=1;
-			}
-		}
-
-
-
-	}
+	
 
 	private function isSelected($user){
 		if(in_array($user, $this->membros))
@@ -581,70 +503,41 @@ class Sociograma{
 
 	private function desenhaNodos()
    {
-   		$this->veIntensidade();
    		$this->colaboracao();
 
-		foreach($this->dadosMembros as $membroTurma)
-		{
-			$usuario1=$membroTurma['codUsuario'];
+		foreach($this->dadosMembros as $membroTurma){
+			$userData = array();
 
-			$InteWF = ifNull_isZero($membroTurma['InteWF']);
+			$userData['id']   = $membroTurma['codUsuario'];
+			$userData['cor']  = $this->userColor($membroTurma['associacao']);
 
-			$InteBP = ifNull_isZero($membroTurma['InteBP']);
 
-			$InteBib = ifNull_isZero($membroTurma['InteBib']);
+			$userData['name'] = $this->primeiroNome($membroTurma['nome']);
+			$userData['nome'] = $this->primeiroNome($membroTurma['nome']).' '.$this->ultimoNome($membroTurma['nome']);
 
-			$InteForum = ifNull_isZero($membroTurma['InteForum']);
+			$userData['isolado'] = $membroTurma['isolado'];
+			$userData['distR'] = $membroTurma['distR'];
+			$userData['distP'] = $membroTurma['distP'];
 
-			$InteCO = ifNull_isZero($membroTurma['InteCO']);
+			$userData['isSelected'] = $this->isSelected($membroTurma['codUsuario']);
 
-			$InteA2 = ifNull_isZero($membroTurma['InteA2']);
-
-			$ColabForum = ifNull_isZero($membroTurma['ColabForum']);
-
-			$ColabBP = ifNull_isZero($membroTurma['ColabBP']);
-
-			$ColabBib = ifNull_isZero($membroTurma['ColabBib']);
-
-			$ColabWF = ifNull_isZero($membroTurma['ColabWF']);
-
-			$Colab = ifNull_isZero($membroTurma['Colab']);
-
-			$label=$this->primeiroNome($membroTurma['nome']);
-
-			if ($membroTurma['associacao']==='A' ){
-				echo "nodes.push( {id: ".$usuario1.", name: '".$label."', cor: '".$this->corAluno."',
-					  nome: '".$this->primeiroNome($membroTurma['nome']).' '.$this->ultimoNome($membroTurma['nome'])."',
-					  biblioteca:'".$InteBib."', forum:'".$InteForum."', a2: '".$InteA2."', wf: '".$InteWF."',
-					  contato:'".$InteCO."',bp: '".$InteBP."', colabF: '".$ColabForum."', colabBP: '".$ColabBP."',
-					  colabBib:'".$ColabBib."', colabWF: '".$ColabWF."', colab: '".$Colab."',  isolado: '".$membroTurma['isolado']."',
-					  distR: '".$membroTurma['distR']."', distP: '".$membroTurma['distP']."', popularidade: '0', isSelected:'".$this->isSelected($usuario1)."'} );\n";
+			foreach($membroTurma as $key => $value){
+				if(!isset($userData[$key]) && $key != 'codUsuario' &&  $key != 'associacao'){
+					$userData[$key] = $value;
+				}
 			}
 
-			else if($membroTurma['associacao']==='P' || $membroTurma['associacao']==='R' ){
-				echo "nodes.push( {id: ".$usuario1.", name: '".$label."', cor: '".$this->corProfessor."',
-					  nome: '".$this->primeiroNome($membroTurma['nome']).' '.$this->ultimoNome($membroTurma['nome'])."', 
-					  biblioteca:'".$InteBib."', forum:'".$InteForum."', a2: '".$InteA2."', contato: '".$InteCO."', 
-					  wf: '".$InteWF."', bp: '".$InteBP."', colabF: '".$ColabForum."', colabBP: '".$ColabBP."', 
-					  colabBib:'".$ColabBib."', colabWF: '".$ColabWF."',  colab: '".$Colab."', isolado: '".$membroTurma['isolado']."', 
-					  distR: '".$membroTurma['distR']."', distP: '".$membroTurma['distP']."', popularidade: '0', isSelected:'".$this->isSelected($usuario1)."'} );\n";
-			}
-
-			else if($membroTurma['associacao']==='M'){
-				echo "nodes.push( {id: ".$usuario1.", name: '".$label."', cor: '".$this->corMonitor."', 
-					  nome: '".$this->primeiroNome($membroTurma['nome']).' '.$this->ultimoNome($membroTurma['nome'])."', 
-					  biblioteca:'".$InteBib."', forum:'".$InteForum."', a2: '".$InteA2."', contato: '".$InteCO."', 
-					  wf: '".$InteWF."', bp: '".$InteBP."', colabF: '".$ColabForum."', colabBP: '".$ColabBP."', 
-					  colabBib:'".$ColabBib."', colabWF: '".$ColabWF."', colab: '".$Colab."',  isolado: '".$membroTurma['isolado']."', 
-					  distR: '".$membroTurma['distR']."', distP: '".$membroTurma['distP']."', popularidade: '0', isSelected:'".$this->isSelected($usuario1)."'} );\n";
-			}
+			if($userData['id'] != null)
+				echo "nodes.push(".json_encode($userData).");";
 
 		}
 	}
 
 	private function incrementa_interacao($AlunoInterage, $AlunoInteragido, $peso)
 	{
-		if($AlunoInterage == $AlunoInteragido) return;
+		if($AlunoInterage == $AlunoInteragido) 
+			return;
+		
 		
 		if($this->arrayInteracoes[$AlunoInterage][$AlunoInteragido] == 0)
 		{
@@ -653,6 +546,22 @@ class Sociograma{
 		else if($this->arrayInteracoes[$AlunoInterage][$AlunoInteragido] < 15)
 		{
 			$this->arrayInteracoes[$AlunoInterage][$AlunoInteragido] += $peso;
+		}
+	}
+
+	private function incrementa_interacaoTurma($AlunoInterage, $AlunoInteragido, $peso)
+	{
+		if($AlunoInterage == $AlunoInteragido) 
+			return;
+		
+		
+		if($this->arrayInteracoesTurma[$AlunoInterage][$AlunoInteragido] == 0)
+		{
+			$this->arrayInteracoesTurma[$AlunoInterage][$AlunoInteragido] = 1.5;
+		}
+		else if($this->arrayInteracoesTurma[$AlunoInterage][$AlunoInteragido] < 15)
+		{
+			$this->arrayInteracoesTurma[$AlunoInterage][$AlunoInteragido] += $peso;
 		}
 	}
 
@@ -689,29 +598,28 @@ class Sociograma{
 
 
 		foreach($pesquisaMembros as $membro){
+
 			$codUsuario=intval($membro['codUsuario']);
 
+			/*if(!in_array($codUsuario, $this->membros))
+				continue;
+*/
 			array_push($this->alunosTurma, $codUsuario);
 
 			//if($todosMembros||in_array($codUsuario,$arrayMembros)){
 				$this->dadosMembros[$codUsuario]['codUsuario']=$codUsuario;
 				$this->dadosMembros[$codUsuario]['nome']=$membro['nome'];
 				$this->dadosMembros[$codUsuario]['associacao']=$membro['associacao'];
-				$this->dadosMembros[$codUsuario]['InteForum']= 0;
-				$this->dadosMembros[$codUsuario]['InteBP']= 0;
-				$this->dadosMembros[$codUsuario]['InteWF']= 0;
-				$this->dadosMembros[$codUsuario]['InteBib']= 0;
-				$this->dadosMembros[$codUsuario]['InteCO']= 0;
-				$this->dadosMembros[$codUsuario]['InteA2']= 0;
 				$this->dadosMembros[$codUsuario]['ColabForum'] = 0;		//para salvar alguma soma, por exemplo, no calculo da colaboração
 				$this->dadosMembros[$codUsuario]['ColabBP'] = 0;
 				$this->dadosMembros[$codUsuario]['ColabWF'] = 0;
 				$this->dadosMembros[$codUsuario]['ColabBib'] = 0;
 				$this->dadosMembros[$codUsuario]['calcA2'] = 0;
 				$this->dadosMembros[$codUsuario]['calcCO'] = 0;
-				$this->dadosMembros[$codUsuario]['Colab'] = 0;
+				$this->dadosMembros[$codUsuario]['colab'] = 0;
 			//}
 		}
+
 	}
 	private function valorMaiorInteracao(){
 		$valorMaiorInteracao=1;
@@ -742,11 +650,16 @@ class Sociograma{
 		/*
 		* As únicas funcionalidades aplicáveis pro cálculo são Fórum, Biblioteca, Webfólio e Bate-Papo
 		*/
-		$forumColab = 0;		//ver o número de interações da turma por categoria
-		$bibColab = 0;
-		$wfColab = 0;
-		$bpColab = 0;
-
+		$arrayDados = array();
+		$arrayDados['colabBP'] = 0;
+		$arrayDados['colabForum'] = 0;
+		$arrayDados['colabBib'] = 0;
+		$arrayDados['colabWF'] = 0;
+		$arrayDados['colabBPTurma'] = 0;
+		$arrayDados['colabForumTurma'] = 0;
+		$arrayDados['colabBibTurma'] = 0;
+		$arrayDados['colabWFTurma'] = 0;
+		
 		/*
 		* Calcula os dados pra colaboração, evasão, distanciamentos. 
 		* O arrayAux só serve pros cálculos do distanciamentos e evasão.
@@ -757,8 +670,6 @@ class Sociograma{
 		$arrayAux = $this->colaboracaoWF($arrayAux);
 		$arrayAux = $this->colaboracaoBib($arrayAux);
 		$arrayAux = $this->colaboracaoBP($arrayAux);
-		$arrayAux = $this->calcA2($arrayAux);
-		$arrayAux = $this->calcCO($arrayAux);
 
 
 		/*
@@ -773,44 +684,79 @@ class Sociograma{
 		* Para cada aluno, calcula-se o grau de colaboração dele, 
 		* soma-se à turma e calcula sua média particular de colaboração.  
 		*/
+		$i = 0;
+		$j = 0;
 		foreach($this->dadosMembros as $key => $colaboracao)
 		{
-			//Grau de colaboração do aluno
-			$colabAbsolut = $this->interacaoForum*$colaboracao['ColabForum'] + $this->interacaoWebfolio*$colaboracao['ColabWF'] + 
-							$this->interacaoBiblioteca*$colaboracao['ColabBib'] + $this->interacaoBatepapo*$colaboracao['ColabBP'];
+			if(!in_array($key, $this->alunosTurma))
+				continue;
 
-			//Salva a média do grau de colaboração em seus dados
-			if($cont) {
-				$this->dadosMembros[$key]['Colab'] = $colabAbsolut/$cont;
+			$arrayDados = $this->calculoDadosColaboracao($colaboracao, $arrayDados, 'Turma');
+
+			if($cont){
+				$this->dadosMembros[$key]['colabTurma'] = $arrayDados['colabAbsolutTurma']/$cont;
 			}
 			else {
-				$this->dadosMembros[$key]['Colab'] = -1;
+				$this->dadosMembros[$key]['colab'] = -1;
 			}
 
-			//Soma ao número de interações da turma as interações do usuário
-			if($this->interacaoForum !=0) $forumColab += $colaboracao['ColabForum'];
-			if($this->interacaoBiblioteca !=0) $bibColab += $colaboracao['ColabBib'];
-			if($this->interacaoWebfolio !=0) $wfColab += $colaboracao['ColabWF'];
-			if($this->interacaoBatepapo !=0) $bpColab += $colaboracao['ColabBP'];
+
+			if(!in_array($key, $this->membros))
+				continue;
+			
+			
+
+			$arrayDados = $this->calculoDadosColaboracao($colaboracao, $arrayDados, '');
+			
+			//Salva a média do grau de colaboração em seus dados
+			if($cont){
+				$this->dadosMembros[$key]['colab'] = $arrayDados['colabAbsolut']/$cont;
+			}
+			else {
+				$this->dadosMembros[$key]['colab'] = -1;
+			}
 
 			$alunos++;
 		}
 
 		if($cont == 0) $cont = 1;  //caso não tenha sido selecionado nenhuma funcionalidade que entra no cálculo da colab
 
-		//calcula a média de cada funcionalidade
-		$forumColab = $forumColab/$alunos;
-		$wfColab = $wfColab/$alunos;
-		$bibColab = $bibColab/$alunos;
-		$bpColab = $bpColab/$alunos;
+		
+		foreach($arrayDados as $key=>$dado){
+			if(strpos($key, "Turma"))
+				$arrayDados[$key] = $dado/count($this->alunosTurma);
+			else 
+				$arrayDados[$key] = $dado/count($this->membros);
+		}
+		$medGeral = ($arrayDados['colabForum'] + $arrayDados['colabWF'] + $arrayDados['colabBib'] + $arrayDados['colabBP'])/$cont;
 
-		//calcula a média de colaboração da turma
-		$medGeral = ($forumColab + $wfColab + $bibColab + $bpColab)/$cont;
+		$medGeralTurma = ($arrayDados['colabForumTurma'] + $arrayDados['colabWFTurma'] + $arrayDados['colabBibTurma'] + $arrayDados['colabBPTurma'])/$cont;
 
 		$this->distanciamento($arrayAux);
-
 		echo "var mediaColab = ".$medGeral.";";
+		echo "var mediaColabTurma = ".$medGeralTurma.";";
 		echo "var ncategorias = ".$cont.";";
+	}
+
+	private function calculoDadosColaboracao($colaboracao, $arrayDados, $turmaLabel){
+		$colabAbsolut = 'colabAbsolut'.$turmaLabel;
+		$colabForum = 'colabForum'.$turmaLabel;
+		$colabBib = 'colabBib'.$turmaLabel;
+		$colabWF = 'colabWF'.$turmaLabel;
+		$colabBP = 'colabBP'.$turmaLabel;
+
+
+		$arrayDados[$colabAbsolut] = $this->interacaoForum*$colaboracao['ColabForum'] +
+									 $this->interacaoWebfolio*$colaboracao['ColabWF'] + 
+									 $this->interacaoBiblioteca*$colaboracao['ColabBib'] +
+									 $this->interacaoBatepapo*$colaboracao['ColabBP'];
+		
+		if($this->interacaoForum !=0) $arrayDados[$colabForum] += $colaboracao['ColabForum'];
+		if($this->interacaoBiblioteca !=0) $arrayDados[$colabBib] += $colaboracao['ColabBib'];
+		if($this->interacaoWebfolio !=0) $arrayDados[$colabWF] += $colaboracao['ColabWF'];
+		if($this->interacaoBatepapo !=0) $arrayDados[$colabBP] += $colaboracao['ColabBP'];
+
+		return $arrayDados;
 	}
 
 	private function colaboracaoForum($arrayAux){
@@ -827,30 +773,23 @@ class Sociograma{
 												 WHERE (codTopico="'.$topico['codTopico'].'" AND
 														DATE(hora) BETWEEN "'.$this->dataInicio.'" AND "'.$this->dataFim.'")
 														ORDER BY codMensagem ASC');
+
+
 				foreach($buscaMensagens as $mensagem)
 				{
 					$codUsuario = $mensagem['codUsuario'];
 
-					$link=0; $imagem=0; $resposta=0; $topico=0;
+					if(!in_array($codUsuario, $this->alunosTurma))
+						continue;
+
+					$link=0; $imagem=0; $topico=0;
 
 					if(intval($mensagem['citou'])==0) $topico = 1; 		//pode multiplicar os valores por um peso
-					else $resposta = 1;
 					if (strpos($mensagem['mensagem'], "<a href=")) $link = 1;
 					if (strpos($mensagem['mensagem'], "<IMG src=")) $imagem = 1;
-					$this->dadosMembros[$codUsuario]['ColabForum'] += ($topico+$link+$imagem+$resposta);
+					$this->dadosMembros[$codUsuario]['ColabForum'] += ($topico+$link+$imagem);
 
-					$codUsuario = $mensagem['codUsuario'];
-
-
-					if(intval($mensagem['citou'], 10) === 0) {
-						$arrayAux = verificacaoArray($arrayAux, $codUsuario, 'Frespondeu');
-					}  		//pode multiplicar os valores por um peso
-					else {
-						$arrayAux = verificacaoArray($arrayAux, $codUsuario, 'Ftopico');
-					}
-
-					if(intval($mensagem['ncitadas'], 10) !== 0)
-						$arrayAux = verificacaoArray($arrayAux, $codUsuario, 'Frecebido');
+					
 				}
 			}
 		}
@@ -864,22 +803,13 @@ class Sociograma{
 		foreach($pesquisaWF as $arquivo)
 		{
 			$user = $arquivo['codUsuario'];
+
+			if(!in_array($user, $this->alunosTurma))
+				continue;
+
 			if($arquivo['visivel'] == 2)
 			{
 				$this->dadosMembros[$user]['ColabWF'] += 1;
-			}
-			$pesquisaComentadores = db_busca(' SELECT codUsuario
-												FROM WFComentario
-												WHERE ( codArquivo="'.intval($arquivo['codArquivo']).'" AND
-												DATE(quando) BETWEEN "'.$this->dataInicio.'" AND "'.$this->dataFim.'")
-												ORDER BY codUsuario ASC');
-
-			foreach($pesquisaComentadores as $aluninhos){
-				$comentador = $aluninhos['codUsuario'];
-
-				$arrayAux = verificacaoArray($arrayAux, $comentador, 'comentouWF');
-				$arrayAux = verificacaoArray($arrayAux, $user, 'recebeuWF');
-
 			}
 		}
 
@@ -892,21 +822,9 @@ class Sociograma{
 		foreach($pesquisaBib as $arquivo)
 		{
 			$user = $arquivo['codUsuario'];
+			if(!in_array($user, $this->alunosTurma))
+				continue;
 			$this->dadosMembros[$user]['ColabBib'] += 1;
-
-			$pesquisaComentadorBiblioteca=db_busca('	SELECT codUsuario
-												FROM BibliotecaComentarios
-												WHERE( codMaterial="'.intval($arquivo['codMaterial']).'" AND
-												DATE(data) BETWEEN "'.$this->dataInicio.'" AND "'.$this->dataFim.'")
-												ORDER BY codUsuario ASC');
-
-			foreach($pesquisaComentadorBiblioteca as $comentadores){
-				$comentador = $comentadores['codUsuario'];
-
-				$arrayAux = verificacaoArray($arrayAux, $comentador, 'comentouBib');
-				$arrayAux = verificacaoArray($arrayAux, $user, 'recebeuBib');
-
-			}
 
 		}
 
@@ -926,173 +844,142 @@ class Sociograma{
 										ORDER BY codUsuario ASC');
 			foreach($pesquisaBP as $interacao){
 				$user = $interacao['codUsuario'];
-				$destino = $interacao['destino'];
+
+				if(!in_array($user, $this->alunosTurma))
+					continue;
 
 				$this->dadosMembros[$user]['ColabBP'] += 1;
 				
-				$arrayAux =	verificacaoArray($arrayAux, $destino, "BPrecebeu");
-				
-				$arrayAux = verificacaoArray($arrayAux, $user, "BPenviou");
 			}
 		}
 
 		return $arrayAux;
 	}
-
- 	private function calcCO($arrayAux){
- 		$pesquisaContatos = db_busca('	SELECT id_mensagem,id_remetente
-										FROM c_mensagem
-										WHERE (	id_turma="'.$this->codTurma.'" AND
-												DATE(data_hora) BETWEEN "'.$this->dataInicio.'" AND "'.$this->dataFim.'")
-										ORDER BY id_mensagem');
-		foreach($pesquisaContatos as $mensagemCO){
-			$remetente = $mensagemCO['id_remetente'];
-			$idMensagem = $mensagemCO['id_mensagem'];
-			$pesquisaDestino = db_busca('	SELECT id_destinatario
-												FROM c_mensagem_destinatario
-												WHERE id_mensagem="'.$idMensagem.'"');
-			if(in_array($remetente, $this->alunosTurma))
-			foreach($pesquisaDestino as $destinoCO){
-
-				$destino = $destinoCO['id_destinatario'];
-
-				if(in_array($destino, $this->alunosTurma)){
-					$arrayAux = verificacaoArray($arrayAux, $remetente, "mandouCO");
-					$arrayAux =	verificacaoArray($arrayAux, $destino, "recebeuCO");
-				}
-
-			}
-		}
-		return $arrayAux;
- 	}
-
- 	private function calcA2($arrayAux){
- 		foreach($this->dadosMembros as $key => $membro){
-			$mandou = $key;
-			$Pesquisa_Aluno2 = db_busca('SELECT codUsuario2
-								FROM A2
-								WHERE ( codUsuario1="'.intval($mandou).'" AND
-								DATE(quando) BETWEEN "'.$this->dataInicio.'" AND "'.$this->dataFim.'")
-								ORDER BY codUsuario2 ASC');
-			if(in_array($mandou, $this->alunosTurma))
-				foreach($Pesquisa_Aluno2 as $recebeuM){
-					$recebeu = $recebeuM['codUsuario2'];
-
-					if(in_array($recebeu, $this->alunosTurma)){
-						$arrayAux = verificacaoArray($arrayAux, $mandou, "mandouA2");
-						$arrayAux = verificacaoArray($arrayAux, $recebeu, "recebeuA2");
-					}
-				}
-		}
-
-		return $arrayAux;
- 	}
 
 	private function distanciamento($arrayAux){
 		echo "var mensagens = [];"; //o array mensagens vai ser o array que contem quantas mensagens o sujeito recebeu (index 0) e quantas enviou (index 1)
 		foreach($this->dadosMembros as $key => $membros){ 
-			$somaRecebidas = $arrayAux[$key]['Frecebido'] +$arrayAux[$key]['BPrecebeu']+$arrayAux[$key]['recebeuCO']
-							+$arrayAux[$key]['recebeuBib']+$arrayAux[$key]['recebeuWF']+$arrayAux[$key]['recebeuA2'];
+			$somaRecebidas = $membros['recForum'] +$membros['recBP']+$membros['recCO']
+							+$membros['recBib']+$membros['recWF']+$membros['recA2'];   
 
-			$somaEnviadas = $arrayAux[$key]['Frespondeu']+$arrayAux[$key]['BPenviou']+$arrayAux[$key]['mandouCO']
-							+$arrayAux[$key]['comentouBib']+$arrayAux[$key]['comentouWF']+$arrayAux[$key]['mandouA2'];
+			$somaEnviadas = $membros['envForum']+$membros['envBP']+$membros['envCO']
+							+$membros['envBib']+$membros['envWF']+$membros['envA2'];
 
 			echo "mensagens.push({id:".$key.", recebidas:".$somaRecebidas.", enviadas:".$somaEnviadas."});";
 
 			
-			$this->dadosMembros[$key]['isolado'] = $this->verificaIsolado($arrayAux[$key]);
-			$this->dadosMembros[$key]['distR']	=	$this->verificaDistR($arrayAux[$key]); //em relação a turma
-			$this->dadosMembros[$key]['distP']	=	$this->verificaDistP($arrayAux[$key]);//pela turma
+			$this->dadosMembros[$key]['isolado'] = $this->verificaIsolado($key);
+			$this->dadosMembros[$key]['distR']	=	$this->verificaDistR($membros); //em relação a turma
+			$this->dadosMembros[$key]['distP']	=	$this->verificaDistP($membros);//pela turma
 		}
 	}
 
-	private function verificaIsolado($arrayAux){
-	$soma = 0;
+	private function verificaIsolado($codUsuario){
 
-	if($this->interacaoForum)
-		$soma += ifNull_isZero($arrayAux['Ftopico']) + ifNull_isZero($arrayAux['Frecebido']) + ifNull_isZero($arrayAux['Frespondeu']);
-	if($this->interacaoBatepapo)
-		$soma += ifNull_isZero($arrayAux['BPrecebeu']) + ifNull_isZero($arrayAux['BPenviou']);
-	if($this->interacaoContatos)
-		$soma += ifNull_isZero($arrayAux['mandouCO']) + ifNull_isZero($arrayAux['recebeuCO']);
-	if($this->interacaoBiblioteca)
-		$soma += ifNull_isZero($arrayAux['comentouBib']) + ifNull_isZero($arrayAux['recebeuBib']);
-	if($this->interacaoWebfolio)
-		$soma += ifNull_isZero($arrayAux['comentouWF']) + ifNull_isZero($arrayAux['recebeuWF']) ;
-	if($this->interacaoA2)
-		$soma += ifNull_isZero($arrayAux['mandouA2']) + ifNull_isZero($arrayAux['recebeuA2']);
-	if($soma == 0) return 1;
-	else return 0;
-}
-
-private function verificaDistR($arrayAux){ //verifica o distanciamento em relação a turma
-
-	$recebida = 0; $mandou = 1;
-	if($this->interacaoForum){
-		$recebida = $recebida || ifNull_isZero($arrayAux['Frecebido']) != 0;
-		$mandou = $mandou && (ifNull_isZero($arrayAux['Ftopico'])== 0) && (ifNull_isZero($arrayAux['Frespondeu']) == 0);
+		$result = db_busca('SELECT * FROM `AcessosDisciplina` WHERE codTurma = '.$this->codTurma.' AND entrada > '.$this->dataInicio.' AND codUsuario = '.$codUsuario.' 
+ ORDER BY `AcessosDisciplina`.`entrada` ASC LIMIT 1');
+		if($result != NULL)
+			return 0;
+		else return 1;
+		
 	}
 
-	if($this->interacaoBatepapo){
-		$recebida = $recebida || ifNull_isZero($arrayAux['BPrecebeu']) != 0;
-		$mandou = $mandou && (ifNull_isZero($arrayAux['BPenviou']) == 0);
+	private function verificaDistR($arrayAux){ //verifica o distanciamento em relação a turma
+
+		$recebida = 0; $mandou = 1;
+		if($this->interacaoForum){
+			$recebida = $recebida || ifNull_isZero($arrayAux['recForum']) != 0;
+			$mandou = $mandou && (ifNull_isZero($arrayAux['envForum'])== 0);
+		}
+
+		if($this->interacaoBatepapo){
+			$recebida = $recebida || ifNull_isZero($arrayAux['recBP']) != 0;
+			$mandou = $mandou && (ifNull_isZero($arrayAux['envBP']) == 0);
+		}
+
+		if($this->interacaoContatos){
+			$recebida = $recebida || ifNull_isZero($arrayAux['recCO']) != 0;
+			$mandou = $mandou && (ifNull_isZero($arrayAux['envCO']) == 0);
+		}
+
+		if($this->interacaoBiblioteca){
+			$recebida = $recebida || ifNull_isZero($arrayAux['recBib']) != 0;
+			$mandou = $mandou && (ifNull_isZero($arrayAux['envBib']) == 0);
+		}
+		if($this->interacaoWebfolio){
+			$recebida = $recebida || ifNull_isZero($arrayAux['recWF']) != 0;
+			$mandou = $mandou && (ifNull_isZero($arrayAux['envWF']) == 0);
+		}
+
+		if($this->interacaoA2){
+			$recebida = $recebida || ifNull_isZero($arrayAux['recA2']) != 0;
+			$mandou = $mandou && (ifNull_isZero($arrayAux['envA2']) == 0) ;
+		}
+
+		return $recebida && $mandou;
 	}
 
-	if($this->interacaoContatos){
-		$recebida = $recebida || ifNull_isZero($arrayAux['recebeuCO']) != 0;
-		$mandou = $mandou && (ifNull_isZero($arrayAux['mandouCO']) == 0);
+	private function userColor($associacao){
+		switch ($associacao) {
+					case 'A':
+						return $this->corAluno;
+					case 'P':
+						return $this->corProfessor;
+					case 'R':
+						return $this->corProfessor;
+					case 'M':
+						return $this->corMonitor;
+					
+		}
 	}
 
-	if($this->interacaoBiblioteca){
-		$recebida = $recebida || ifNull_isZero($arrayAux['recebeuBib']) != 0;
-		$mandou = $mandou && (ifNull_isZero($arrayAux['comentouBib']) == 0);
-	}
-	if($this->interacaoWebfolio){
-		$recebida = $recebida || ifNull_isZero($arrayAux['recebeuWF']) != 0;
-		$mandou = $mandou && (ifNull_isZero($arrayAux['comentouWF']) == 0);
+	private function incrementaIntensidade($usuarioInterage, $usuarioInteragido, $key){
+		$recKey = 'rec'.$key;
+		$envKey = 'env'.$key;
+
+		if(isset($this->dadosMembros[$usuarioInterage][$envKey]))
+			$this->dadosMembros[$usuarioInterage][$envKey]++;
+		else $this->dadosMembros[$usuarioInterage][$envKey] = 1;
+
+		if(isset($this->dadosMembros[$usuarioInteragido][$recKey]))
+			$this->dadosMembros[$usuarioInteragido][$recKey]++;
+		else $this->dadosMembros[$usuarioInteragido][$recKey] = 1;
+
 	}
 
-	if($this->interacaoA2){
-		$recebida = $recebida || ifNull_isZero($arrayAux['recebeuA2']) != 0;
-		$mandou = $mandou && (ifNull_isZero($arrayAux['mandouA2']) == 0) ;
-	}
+	private function verificaDistP($arrayAux){
+		$recebida = 1; $mandou = 0;
+		if($this->interacaoForum){
+			$recebida = $recebida && ifNull_isZero($arrayAux['recForum']) == 0;
+			$mandou = $mandou || (ifNull_isZero($arrayAux['envForum']) != 0);
+		}
 
-	return $recebida && $mandou;
-}
+		if($this->interacaoBatepapo){
+			$recebida = $recebida && ifNull_isZero($arrayAux['recBP']) == 0;
+			$mandou = $mandou || (ifNull_isZero($arrayAux['envBP']) != 0);
+		}
 
-private function verificaDistP($arrayAux){
-	$recebida = 1; $mandou = 0;
-	if($this->interacaoForum){
-		$recebida = $recebida && ifNull_isZero($arrayAux['Frecebido']) == 0;
-		$mandou = $mandou || (ifNull_isZero($arrayAux['Ftopico']) != 0) || (ifNull_isZero($arrayAux['Frespondeu']) != 0);
-	}
+		if($this->interacaoContatos){
+			$recebida = $recebida && ifNull_isZero($arrayAux['recCO']) == 0;
+			$mandou = $mandou || (ifNull_isZero($arrayAux['envCO']) != 0);
+		}
 
-	if($this->interacaoBatepapo){
-		$recebida = $recebida && ifNull_isZero($arrayAux['BPrecebeu']) == 0;
-		$mandou = $mandou || (ifNull_isZero($arrayAux['BPenviou']) != 0);
-	}
+		if($this->interacaoBiblioteca){
+			$recebida = $recebida && ifNull_isZero($arrayAux['recBib']) == 0;
+			$mandou = $mandou || (ifNull_isZero($arrayAux['envBib']) != 0);
+		}
+		if($this->interacaoWebfolio){
+			$recebida = $recebida && ifNull_isZero($arrayAux['recWF']) == 0;
+			$mandou = $mandou || (ifNull_isZero($arrayAux['envWF']) != 0);
+		}
 
-	if($this->interacaoContatos){
-		$recebida = $recebida && ifNull_isZero($arrayAux['recebeuCO']) == 0;
-		$mandou = $mandou || (ifNull_isZero($arrayAux['mandouCO']) != 0);
-	}
+		if($this->interacaoA2){
+			$recebida = $recebida && ifNull_isZero($arrayAux['recA2']) == 0;
+			$mandou = $mandou || (ifNull_isZero($arrayAux['envA2']) != 0 );
+		}
 
-	if($this->interacaoBiblioteca){
-		$recebida = $recebida && ifNull_isZero($arrayAux['recebeuBib']) == 0;
-		$mandou = $mandou || (ifNull_isZero($arrayAux['comentouBib']) != 0);
+		return $recebida && $mandou;
 	}
-	if($this->interacaoWebfolio){
-		$recebida = $recebida && ifNull_isZero($arrayAux['recebeuWF']) == 0;
-		$mandou = $mandou || (ifNull_isZero($arrayAux['comentouWF']) != 0);
-	}
-
-	if($this->interacaoA2){
-		$recebida = $recebida && ifNull_isZero($arrayAux['recebeuA2']) == 0;
-		$mandou = $mandou || (ifNull_isZero($arrayAux['mandouA2']) != 0 );
-	}
-
-	return $recebida && $mandou;
-}
 
 }
 
@@ -1130,6 +1017,9 @@ function escreveInteracoes($array, $arrayMembers)
 function verificacaoArray($array, $usuario, $campo){
 	$usuario = intval($usuario);
 
+	/*if(!in_array($usuario, $this->membros))
+		continue;
+*/
 	if( !(isset($array[$usuario])) ){
 		$array[$usuario] = array();
 	}
@@ -1145,6 +1035,7 @@ function verificacaoArray($array, $usuario, $campo){
 
 	return $array;
 }
+
 
 function ifNull_isZero($valor){
 	if($valor == null)	return 0;

@@ -103,5 +103,13 @@
 			}
 		}
 
+		public function toJavascriptArrayTurma($turma){
+			echo "var desvioPopularTurma = ".$this->getDesvioPopular().";";
+			echo "var mediaPopTurma = ".$this->getMediaTurma().";";
+			foreach($turma as $index => $aluno){
+				echo "nodes[".$index."].popularidadeTurma = ".$this->getPopularidadeAluno($aluno).";";
+			}
+		}
+
 	}
 ?>

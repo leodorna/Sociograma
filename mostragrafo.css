@@ -1,0 +1,246 @@
+
+.link {
+  fill: #777;
+  stroke: #666;
+  stroke-width: 1px;
+}
+
+#suit {
+  fill: #666666;
+}
+
+
+circle {
+  fill: #ccc;
+  stroke: #00008B;
+  stroke-width: 2px;     
+  z-index: 2;
+}
+
+#myDiagram
+{
+  background: linear-gradient(to left, #E6E6E6, #E6E6E6);
+}
+
+#interrogacao{
+  position: absolute;
+  cursor: pointer;
+  top: 10px;
+  right: 20px;
+  width:20px;
+  height: 20px;
+}
+
+#help{
+  z-index: 2;
+  position: absolute;
+  background-color: #cccccc;
+  font-size: 14px;
+  top: 15px;
+  right: 25px;
+  width: 400px;
+  visibility: hidden;
+}
+
+#closeHelp{
+  position: absolute;
+  right: 4px;
+  cursor: pointer;
+}
+
+#closeBox{
+  position:absolute; 
+  right:4px;
+  cursor:pointer;
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+p.toolheader
+{
+  text-align: center;
+  font: bold 16px segoe ui;
+  color: azure;
+}
+
+div.tooltip { 
+    position: absolute;   
+    width: 220px;                  
+    padding: 2px;       
+    font: 12px sans-serif;    
+    background: #9c9c9c; 
+    border: 0px;    
+    border-radius: 0px;     
+    pointer-events: none;     
+}
+
+div.tooltip p{ 
+position: relative;
+  margin-left: 6px;
+  font: 14px segoe ui;
+  color: azure;
+    line-height: 4px;                 
+     
+}
+
+html, body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* define a fixed width for the entire menu */
+.navigation {
+  width: 300px;
+}
+
+/* reset our lists to remove bullet points and padding */
+.mainmenu, .submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* make ALL links (main and submenu) have padding and background color */
+.mainmenu a {
+  display: block;
+  background-color: #CCC;
+  text-decoration: none;
+  padding: 10px;
+  color: #000;
+}
+
+/* add hover behaviour */
+.mainmenu a:hover {
+    background-color: #C5C5C5;
+}
+
+
+/* when hovering over a .mainmenu item,
+  display the submenu inside it.
+  we're changing the submenu's max-height from 0 to 200px;
+*/
+
+.mainmenu li:hover .submenu {
+  display: block;
+  max-height: 200px;
+}
+
+
+/*
+  we now overwrite the background-color for .submenu links only.
+  CSS reads down the page, so code at the bottom will overwrite the code at the top.
+*/
+
+.submenu a {
+  background-color: #999;
+}
+
+/* hover behaviour for links inside .submenu */
+.submenu a:hover {
+  background-color: #666;
+}
+
+/* this is the initial state of all submenus.
+  we set it to max-height: 0, and hide the overflowed content.
+*/
+.submenu {
+  overflow: hidden;
+  max-height: 0;
+  -webkit-transition: all 0.5s ease-out;
+}
+
+    *,
+  *:before,
+  *:after { -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; }
+  
+  #tabs{
+    padding:0;
+  }
+  #tabs-1{
+    padding:0;
+  }
+  #tabs-2{
+    padding:0;
+  }
+
+  #tabela-fora {
+    width:  400px;
+    display: table;
+    box-sizing: border-box;
+    height: auto;
+    background-color: #bbbbbb;
+    border: 1px solid #fff;
+    border-bottom: 0;
+    border-left: 0;
+  }
+
+  #titulo-tabela {
+    text-align: center;
+    position: relative;
+    float: left;
+    width:  100%;
+    font-weight: bold;
+    font-size: 18px;
+    border-bottom: 1px solid #fff;
+    border-left: 1px solid #fff;
+  }
+
+  .elementos-tabela {
+    text-align: center;
+    position: relative;
+    float: left;
+    font-size: 14px;
+    border-bottom: 1px solid #fff;
+    border-left: 1px solid #fff;
+  }
+
+  .headers-tabela {
+    text-align: center;
+    position: relative;
+    float: left;
+    font-weight: bold;
+    border-bottom: 1px solid #fff;
+    border-left: 1px solid #fff;
+  }
+  
+  .report-line{
+	position:relative;
+	width: 100%;
+	float: left;
+	padding-top: 5px;
+	border-bottom: 1px solid #fff;
+	border-left: 1px solid #fff;
+  }
+  
+  .report-line p{
+	position: absolute;
+	left: 33%;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+  }
+  #modal{
+	visibility: hidden;
+	height: 50%;
+	width: 33%;
+	position: absolute;
+	left: 33%;
+	top: 25%;
+	z-index: 4;
+	background-color: #fff;
+  }
+  
+  #closeModal{
+	  position:absolute; 
+	  right:4px;
+	  cursor: pointer;
+  }
+  
+  

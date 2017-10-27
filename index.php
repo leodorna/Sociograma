@@ -1,6 +1,6 @@
 <?php
 // Recebe as páginas
-// require_once(dirname(__FILE__).'/../sistema.inc.php'); UNCOMMENT
+require_once(dirname(__FILE__).'/../sistema.inc.php');
 
 $pagina=new Pagina();
 $pagina->add_js('sociograma.js?t='.time());
