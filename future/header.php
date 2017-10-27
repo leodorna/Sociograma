@@ -51,44 +51,44 @@
             <div style="font-size: 12px;">
                 <spam>Aluno:</spam><br>
                 <?php
-                    imprimeCores(Aluno);
+                //    imprimeCores(Aluno);
                 ?>
 
                 <spam>Professor:</spam><br>
                 <?php
-                    imprimeCores(Professor);
+                //    imprimeCores(Professor);
                 ?>
 
                 <spam>Monitor:</spam><br>
                 <?php
-                    imprimeCores(Monitor);
+                //    imprimeCores(Monitor);
                 ?>
             </div>
             <h3>Nível de relevância</h3>
             <div style="font-size: 12px; border-spacing: 5px;">
                 <div>
                 	<spam>Contatos:</spam><br>
-                    <?php imprimeNivel_Relevancia(contatos);?>
+                    <?php //imprimeNivel_Relevancia(contatos);?>
                 </div>
                 <div>
                 	<spam>Bate-papo:</spam><br>
-                    <?php imprimeNivel_Relevancia(batepapo);?>
+                    <?php //imprimeNivel_Relevancia(batepapo);?>
                 </div>
             	<div>
             		<spam>Fórum:</spam><br>
-                	<?php imprimeNivel_Relevancia(forum);?>
+                	<?php //imprimeNivel_Relevancia(forum);?>
                 </div>
                 <div>
                 	<spam>Biblioteca:</spam><br>
-                	<?php imprimeNivel_Relevancia(biblioteca);?>
+                	<?php //imprimeNivel_Relevancia(biblioteca);?>
                 </div>
                	<div>
                		<spam>A2:</spam><br>
-               		<?php imprimeNivel_Relevancia(a2);?>
+               		<?php //imprimeNivel_Relevancia(a2);?>
                	</div>
                	<div>
                		<spam>Webfólio:</spam><br>
-                	<?php imprimeNivel_Relevancia(webfolio);?>
+                	<?php //imprimeNivel_Relevancia(webfolio);?>
                 </div>
             </div>
             <div>
@@ -97,7 +97,7 @@
             </div>
 
             <?php
-            $id = 0;
+            /*$id = 0;
 
             $pesquisaMembros=db_busca(' SELECT tu.codUsuario,tu.associacao,u.nome
                                         FROM
@@ -173,7 +173,7 @@
                 $id++;
             }
             echo('</ul>');
-            echo('</div>');
+            echo('</div>');*/
             ?>
 
             <button type="submit" style="background-color: #2180D3;" value="Analisar" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
@@ -183,7 +183,7 @@
     </nav>
 </div>
 
-<?php
+<?php/*
 function imprimeCores($tipo){
     $cores = array('fcfcfc'=>'Branco', '020202'=>'Preto', '38bc48'=>'Verde', '3395FF'=>'Azul',
                    'ffe900'=>'Amarelo', 'a999cc'=>'Violeta', 'ff0022'=>'Vermelho', 'ff8000'=>'Laranja', '964215'=>'Marrom');
@@ -222,6 +222,6 @@ function imprimeNivel_Relevancia($tipo_rel){
     }
     echo('</ul>');    
     echo('</select>');
-}
+}*/
 ?>
 <!-- <div class="mdl-layout__obfuscator"></div> -->
