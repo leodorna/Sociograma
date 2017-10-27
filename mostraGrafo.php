@@ -1,4 +1,5 @@
-<?php/* 
+<?php
+/* 
 require_once(dirname(__FILE__).'/../sistema.inc.php');
 require_once(dirname(__FILE__).'/sociograma.php');
 $pagina=new Pagina();
@@ -213,7 +214,8 @@ Portanto:</p>
      echo "var dadosRelatorio = {'turma':".$pagina->sessao->codTurma.", 'pesoBP':".$interacaoBatepapo.", 'pesoWF':".$interacaoWebfolio.", 'pesoCo': ".$interacaoContatos.", 'pesoA2': ".$interacaoA2.", 'pesoFo':".$interacaoForum.", 'pesoBib': ".$interacaoBiblioteca.", 'mediaPop': 0, 'mediaPopTurma': 0};"; 
 
      $sociograma=new Sociograma($codUsuario,$codTurma,$layout,$directed,$dataInicio,$dataFim,$corAluno,$corProfessor,$corMonitor,$interacaoContatos,$interacaoBatepapo,$interacaoForum,$interacaoBiblioteca,$interacaoA2,$interacaoWebfolio,$arrayMembros,$arrayGrupos);
-    */?>
+    */
+	?>
 
 
 updateLinks(nodes, edges, links)
