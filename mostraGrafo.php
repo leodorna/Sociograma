@@ -1,5 +1,4 @@
 <?php
-/* 
 require_once(dirname(__FILE__).'/../sistema.inc.php');
 require_once(dirname(__FILE__).'/sociograma.php');
 $pagina=new Pagina();
@@ -9,15 +8,6 @@ $codTurma=intval($pagina->sessao->codTurma);
 
 
 
-
-if(isset($_POST['layout']))
-	$layout=db_escape($_POST['layout']);
-else
-	$layout='';
-if(isset($_POST['directed']))
-	$directed=db_escape($_POST['directed']);
-else
-	$directed='';
 if(isset($_POST['dataInicio']))
 	$dataInicio=db_escape($_POST['dataInicio']);
 else
@@ -26,14 +16,23 @@ if(isset($_POST['dataFim']))$dataFim=db_escape($_POST['dataFim']);
 else
 	$dataFim='';
 
-
 if(isset($_POST['checkboxMembros'])) {
   $arrayMembros=($_POST['checkboxMembros']);
   $arrayGrupos=($_POST['checkboxGrupos']);
-  }
+}
 else{
-  $arrayMembros=($_POST['checkboxMembros']);
-  $arrayGrupos=($_POST['checkboxGrupos']);
+	$pesquisaMembros=db_busca(' SELECT tu.codUsuario
+                                FROM   (SELECT codUsuario
+                                        FROM TurmaUsuario
+                                        WHERE codTurma="'.$codTurma.'")
+                                        AS tu INNER JOIN Usuario
+                                        AS u ON tu.codUsuario=u.codUsuario
+                                        ORDER BY u.nome ASC');
+	$arrayMembros = array();
+	foreach($pesquisaMembros as $membro){
+        array_push($arrayMembros, $membro['codUsuario']);
+    }
+    $arrayGrupos = null;  
 }
 
 if(isset($_POST['corAluno']))
@@ -51,29 +50,41 @@ if(isset($_POST['corMonitor']))
 else
 	$corMonitor="#CCCCCC";
 
-if(isset($_POST['relcontatos']))	//post dos niveis de relevancia que serão obtidos em 'geraGrafo.php'
+if(isset($_POST['relcontatos']))
 	$interacaoContatos=$_POST['relcontatos'];
+else
+	$interacaoContatos=5;
 
 if(isset($_POST['relbatepapo']))
 	$interacaoBatepapo=$_POST['relbatepapo'];
+else
+	$interacaoBatepapo=5;
 
 if(isset($_POST['relforum']))
 	$interacaoForum=$_POST['relforum'];
+else
+	$interacaoBatepapo=5;
 
 if(isset($_POST['relbiblioteca']))
 	$interacaoBiblioteca=$_POST['relbiblioteca'];
+else
+	$interacaoBiblioteca=5;
 
 if(isset($_POST['rela2']))
 	$interacaoA2=$_POST['rela2'];
+else
+	$interacaoA2=5;
 
 if(isset($_POST['relwebfolio']))
 	$interacaoWebfolio=$_POST['relwebfolio'];
+else
+	$interacaoWebfolio=5;
 
 //$pagina=new Pagina();
 //$pagina->cabecalho('MapaSocial');
 
 if((count($_POST['checkboxMembros']) != 0 || count($_POST['checkboxGrupos']) != 0) && !($interacaoContatos==0 && $interacaoBatepapo==0 && $interacaoForum==0 && $interacaoBiblioteca==0 && $interacaoA2==0 && $interacaoWebfolio==0)) {
- */
+
 ?>
 <!--Gera a imagem do mapa social, passando os parâmetros pelo link-->
 <link rel="stylesheet" type="text/css" href= "mostragrafo.css">
@@ -160,7 +171,7 @@ Portanto:</p>
 
 
 
-   <?php/* 
+   <?
      function printEstrategias($estrategias){
        echo "'".$estrategias[0]['Estrategias']."'";
         for($i = 1; $i < 6; $i++){
@@ -214,8 +225,7 @@ Portanto:</p>
      echo "var dadosRelatorio = {'turma':".$pagina->sessao->codTurma.", 'pesoBP':".$interacaoBatepapo.", 'pesoWF':".$interacaoWebfolio.", 'pesoCo': ".$interacaoContatos.", 'pesoA2': ".$interacaoA2.", 'pesoFo':".$interacaoForum.", 'pesoBib': ".$interacaoBiblioteca.", 'mediaPop': 0, 'mediaPopTurma': 0};"; 
 
      $sociograma=new Sociograma($codUsuario,$codTurma,$layout,$directed,$dataInicio,$dataFim,$corAluno,$corProfessor,$corMonitor,$interacaoContatos,$interacaoBatepapo,$interacaoForum,$interacaoBiblioteca,$interacaoA2,$interacaoWebfolio,$arrayMembros,$arrayGrupos);
-    */
-	?>
+   ?>
 
 
 updateLinks(nodes, edges, links)
@@ -277,20 +287,20 @@ var mapCat = d3.select("#tabs-2").append("svg")
 
 
 mapCat.append("defs").selectAll("marker")
-  .data(["suit", "licensing", "resolved"])
-  .enter().append("marker")
-  .attr("id", function(d) { return d; })
-  .attr("viewBox", "0 -5 10 10")
-  .attr("refX", 15)
-  .attr("refY", -1.5)
-  .attr("markerWidth", 6)
-  .attr("markerHeight", 6)
-  .attr("orient", "auto")
-  .append("path")
-  .attr("d", "M0,-5L10,0L0,5");
+	  .data(["suit"])
+	  .enter().append("marker")
+	  .attr("id", function(d) { return d; })
+	  .attr("viewBox", "0 -5 10 10")
+	  .attr("refX", 15)
+	  .attr("refY", -1.5)
+	  .attr("markerWidth", 6)
+	  .attr("markerHeight", 6)
+	  .attr("orient", "auto")
+	  .append("path")
+	  .attr("d", "M0,-5L10,0L0,5");
 
 mapInt.append("defs").selectAll("marker")
-      .data(["suit", "licensing", "resolved"])
+      .data(["suit"])
       .enter().append("marker")
       .attr("id", function(d) { return d; })
       .attr("viewBox", "0 -5 10 10")
@@ -434,9 +444,13 @@ d3.select("#tabs-2").on("click", function(){
 d3.select("#mapInt").on("click", function(){
 	d3.select("#tabs-2").style("visibility", "hidden");
 	d3.select("#tabs-1").style("visibility", "visible");
+ // d3.select("#participantes-container").style("visibility", "hidden");
+  console.log("oioi");
 });
 
 d3.select("#mapCat").on("click", function(){
+  //console.log(d3.select("#participantes-container"));
+  //d3.select("#participantes-container").style("visibility", "visible");
 	d3.select("#tabs-1").style("visibility", "hidden");
 	d3.select("#tabs-2").style("visibility", "visible");
 	modo = d3.select("#Selecao").property("value");
@@ -833,16 +847,12 @@ d3.select("#closeHelp").on("click", function(d){
 
 </body>
 
-<?php/* 
+<?php
 }else if($interacaoContatos==0 && $interacaoBatepapo==0 && $interacaoForum==0 && $interacaoBiblioteca==0 && $interacaoA2==0 && $interacaoWebfolio==0) {
 	echo '<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">';
 	echo 'alert ("Nenhum n\u00edvel de relev\u00e2ncia atribu\u00eddo.")';
 	echo '</SCRIPT>';
-}else if(count($_POST['checkboxMembros'])==0 || count($_POST['checkboxGrupos'])==0){
-	echo '<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">';
-	echo 'alert ("Nenhum membro ou grupo selecionado.")';
-	echo '</SCRIPT>';
-} */
+}
 //$pagina->rodape();
 
 require_once( 'future/footer.php' );

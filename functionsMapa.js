@@ -17,7 +17,7 @@ function fazLinks(d)
   var deltaX = d.target.x - d.source.x;
   var deltaY = d.target.y - d.source.y;
   var distance = Math.sqrt(deltaY*deltaY+deltaX*deltaX);
-  var raio = Number(circleCat.attr("r")) + 1.5;
+  var raio = Number(circleInt.attr("r")) + 1.5;
   var sinA = deltaY/distance;
   var cosA = deltaX/distance;
   var dy = raio*sinA;
@@ -33,7 +33,7 @@ function fazSeta(d)
     var deltaX = d.target.x - d.source.x;
     var deltaY = d.target.y - d.source.y;
     var distance = Math.sqrt(deltaY*deltaY+deltaX*deltaX);
-    var raio = Number(circleCat.attr("r")) + 1;
+    var raio = Number(circleInt.attr("r")) + 1;
     var sinA = deltaY/distance;
     var cosA = deltaX/distance;
     var x0 = d.target.x - raio*cosA;
@@ -62,7 +62,7 @@ function transform(d) {
 }
 
 function set_highlight(d, mapa){
-  mapCat.style("cursor","pointer");
+  mapInt.style("cursor","pointer");
   mapInt.style("cursor","pointer");
 
   if (focus_node!==null) d = focus_node;
@@ -70,16 +70,16 @@ function set_highlight(d, mapa){
 
   if (highlight_color!="white")
   {
-    if(mapa == "cat"){
-      circleCat.style(towhite, function(o) {
+    if(mapa == 1){
+      circleInt.style(towhite, function(o) {
       return isConnected(d, o) ? highlight_color : "white";});
-      textCat.style("font-weight", function(o) {
+      textInt.style("font-weight", function(o) {
       return isConnected(d, o) ? "bold" : "normal";});
-      pathCat.style("stroke", function(o) {
+      pathInt.style("stroke", function(o) {
       return o.source.index == d.index || o.target.index == d.index ? highlight_color : ((isNumber(o.score) && o.score>=0)?color(o.score):default_link_color);
       });
     }
-    if(mapa == "int"){
+    if(mapa == 0){
     circleInt.style(towhite, function(o) {
       return isConnected(d, o) ? highlight_color : "white";});
       textInt.style("font-weight", function(o) {
@@ -94,19 +94,19 @@ function set_highlight(d, mapa){
 
 function exit_highlight(mapa){
    highlight_node = null;
-   if(mapa == "cat"){
+   if(mapa == 1){
      if (focus_node===null)
       {
-        mapCat.style("cursor","move");
+        mapInt.style("cursor","move");
 
         if (highlight_color!="white")
         {
-          circleCat.style(towhite, "white");
-          pathCat.style("stroke", function(o) {return (isNumber(o.score) && o.score>=0)?color(o.score):default_link_color});
+          circleInt.style(towhite, "white");
+          pathInt.style("stroke", function(o) {return (isNumber(o.score) && o.score>=0)?color(o.score):default_link_color});
         }
       }
    }
-   if(mapa == "int"){
+   if(mapa == 0){
     if (focus_node===null)
     {
       mapInt.style("cursor", "move");
@@ -125,25 +125,25 @@ function set_focus(d, mapa){
 
   if (highlight_trans<1)
   {
-    if(mapa == "cat"){
-      circleCat.style("opacity", function(o) {
+    if(mapa == 1){
+      circleInt.style("opacity", function(o) {
               if(isConnected(d,o)) return  1;
               else return highlight_trans;
          });
 
-      textCat.style("opacity", function(o) {
+      textInt.style("opacity", function(o) {
                   return isConnected(d, o) ? 1 : highlight_trans;
               });
 
-      pathCat.style("opacity", function(o) {
+      pathInt.style("opacity", function(o) {
                   return o.source.index == d.index || o.target.index == d.index ? 1 : highlight_trans;
               });
 
-      setaCat.style("opacity", function(o) {
+      setaInt.style("opacity", function(o) {
                   return o.source.index == d.index || o.target.index == d.index ? 1 : highlight_trans;
               });
     }
-    if(mapa == "int"){
+    if(mapa == 0){
       circleInt.style("opacity", function(o) {
               if(isConnected(d,o)) return  1;
               else return highlight_trans;
@@ -165,22 +165,27 @@ function set_focus(d, mapa){
 }
 
 function selectGroup(){
+  /*var jqxhr = $.post( "mostraGrafo.php", $('form').serialize(), function(data) {
+    var newText = $(data).find("#Grafo").text()
+    $("#Grafo").html(newText);
+  })*/
+
   var grupo = d3.select(this).text();
   grupo = grupo.split("Grupo ")[1] - 1;
 
-  circleCat.style("opacity", highlight_trans);
-  pathCat.style("opacity", highlight_trans);
-  setaCat.style("opacity", highlight_trans);
-  textCat.style("opacity", highlight_trans);
+  circleInt.style("opacity", highlight_trans);
+  pathInt.style("opacity", highlight_trans);
+  setaInt.style("opacity", highlight_trans);
+  textInt.style("opacity", highlight_trans);
 
   for(var j = 0; j < grupos[grupo].length; j++){
-    circleCat.each(function(d, i){
+    circleInt.each(function(d, i){
       if(grupos[grupo][j] == d.id){
         d3.select(this).style("opacity", 1);
         return;
       }
     });
-    textCat.each(function(d, i){
+    textInt.each(function(d, i){
       if(grupos[grupo][j] == d.id){
         d3.select(this).style("opacity", 1);
         return;
@@ -188,14 +193,14 @@ function selectGroup(){
     })
   }
 
-  pathCat.each(function(d, i){
+  pathInt.each(function(d, i){
     if(searchInGroup(d.source.id, grupos[grupo]) && searchInGroup(d.target.id, grupos[grupo])){
       d3.select(this).style("opacity", 1);
     }
   })
 
 
-  setaCat.each(function(d, i){
+  setaInt.each(function(d, i){
     if(searchInGroup(d.source.id, grupos[grupo]) && searchInGroup(d.target.id, grupos[grupo])){
       d3.select(this).style("opacity", 1);
     }
@@ -204,26 +209,28 @@ function selectGroup(){
 }
 
 function tick() {
-
   pathInt.attr("points", fazLinks);
   setaInt.attr("points", fazSeta);
   circleInt.attr("transform", transform);
   textInt.attr("transform", transform);
 
-  pathCat.attr("points", fazLinks);
-  setaCat.attr("points", fazSeta);
-  circleCat.attr("transform", transform);
-  textCat.attr("transform", transform);
 }
 
 
- function searchInGroup(key, grupo){
-    for(var i = 0; i < grupo.length; i++){
-      if(key == grupo[i])
-        return true;
-    }
-    return false;
- }
+function searchInGroup(key, grupo){
+	for(var i = 0; i < grupo.length; i++){
+	  if(key == grupo[i])
+	    return true;
+	}
+	return false;
+}
+
+function grupoString(numero_grupo){
+	if(numero_grupo >= 10) 
+		return numero_grupo.toString();
+	else 
+		return "0"+numero_grupo.toString();
+}
 
  function hideButtons(){
     d3.select("#buttons").style("visibility", "hidden");

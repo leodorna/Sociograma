@@ -71,3 +71,24 @@ function uncheckMaterialDesign(i){
 		label.classList.remove("is-checked");
 	}
 }
+
+function mostrarNomes(){
+	var checked = document.getElementById("mostrar-participantes").checked;
+	if(checked){
+		textInt.each(function(d,i){
+    		d3.select(this).text(i+1);
+    	})
+		textCat.each(function(d, i){
+        	d3.select(this).text(i+1);
+      	})
+    }
+    else{
+    	textInt.each(function(d,i){
+    		d3.select(this).text(d.name);
+    	})
+    	textCat.each(function(d,i){
+    		d3.select(this).text(d.name);
+    	})
+    }
+
+}

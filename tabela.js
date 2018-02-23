@@ -1,10 +1,14 @@
-
+const INTERACOES = 0;
+const INDICADOR_SOCIAL = 1;
 var tabela = {
     tooltip: "",
     user: "",
     grupos: [],
     state: "",            //precisamos de um state pra ver se a tabela está sendo mostrada na tela ou não
+    typeMap: INTERACOES,
+    textoEstrategia: "",
     dadosRelatorio: [],
+    interacoes: [],
     getState: function(){
       return this.state;
     },
@@ -23,6 +27,9 @@ var tabela = {
     setDadosRelatorio: function(dados){
       this.dadosRelatorio = dados;
     },
+    setInteracoes: function(interacoes){
+      this.interacoes = interacoes;
+    },
     position: function(){
       var top = (-sizetoNumber(this.tooltip.style("height"))+ d3.event.y - 10);
       var left = d3.event.x;
@@ -31,8 +38,7 @@ var tabela = {
     		top = 0;
     	if(d3.event.x + sizetoNumber(this.tooltip.style("width")) > width)
     		left = width - sizetoNumber(this.tooltip.style("width"));
-
-//      this.tooltip.style("position", "absolute").style("bottom", bottom).style("left", left);
+      
       this.tooltip.style("position", "absolute").style("top", top).style("left", left);
     },
     boxTitle: function(){
@@ -99,12 +105,36 @@ var tabela = {
       }
       var dataUser = this.user;
       var globalData = this.dadosRelatorio;
+      dataUser['turma'] = this.dadosRelatorio['turma'];
+
+	  if(this.typeMap == INTERACOES){
+		  this.tooltip.append("div")
+          .attr("class", "report-line")
+          .style("height", 30)
+          .append("p")
+          .attr("onclick", "postUserInteracoes("+JSON.stringify(dataUser)+", "+JSON.stringify(this.interacoes)+")")
+          .text("Exibir Relatórios");
+	  }
+	  
+	  
+      if(this.typeMap == INDICADOR_SOCIAL){  
+        this.tooltip.append("div")
+            .style("border", "1px solid #bbb")
+            .append("p")
+            .style("padding", "5 5 0 5")
+            .style("margin", 0)
+            .style("text-align", "justify")
+            .text(this.textoEstrategia)
+      
+
       this.tooltip.append("div")
           .attr("class", "report-line")
           .style("height", 30)
           .append("p")
-          .attr("onclick", "postUser("+JSON.stringify(dataUser)+", "+JSON.stringify(globalData)+")")
+          .attr("onclick", "postUserIndicadores("+JSON.stringify(dataUser)+", "+JSON.stringify(globalData)+")")
           .text("Exibir Relatórios");
+
+      }
     },
     changeDataFromTable: function(i, j, text){
       var index = this.headers.length*i + j;
@@ -118,15 +148,43 @@ var tabela = {
     }
   };
 
-function postUser(user, globalData){
+function postUserInteracoes(user, interacoes){
+   arrayGrupos = [];
+   form=document.createElement('FORM');
+   form.name='formInteracoes';
+   form.method='POST';
+   form.action='./relatorioInteracoes.php';
+   form.target='_blank';
+
+   for(var prop in user) {
+      if(user.hasOwnProperty(prop)) { 
+  			input = document.createElement('INPUT');
+  			input.type='HIDDEN';
+  			input.name= prop;
+  			input.value=user[prop];
+  			form.appendChild(input);
+      }
+    }
+    console.log(interacoes);
+
+    input = document.createElement('INPUT');
+    input.type= 'HIDDEN';
+    input.name= 'interacoes';
+    input.value= JSON.stringify(interacoes);
+    form.appendChild(input);
+
+	document.body.appendChild(form);
+
+   form.submit();
+}  
+  
+function postUserIndicadores(user, globalData){
    arrayGrupos = [];
    form=document.createElement('FORM');
    form.name='myForm';
    form.method='POST';
-   form.action='./relatorio.php';
+   form.action='./relatorioIndicador.php';
    form.target='_blank';
-
-   console.log(globalData);
 
    for(var prop in globalData) {
       if(globalData.hasOwnProperty(prop)) { 

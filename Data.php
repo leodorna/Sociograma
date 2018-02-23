@@ -34,6 +34,8 @@
 		public function getMedia(){
 			$soma = 0;
 			$size = $this->getCount();
+			if($size == 0)
+				return 0;
 			foreach($this->data as $dado){
 				$soma += $dado;
 			}
@@ -45,6 +47,9 @@
 			$soma = 0;
 			$media = $this->getMedia();
 			$size = $this->getCount();
+			if($size == 0){
+				return 0;
+			}
 			foreach($this->data as $dado){
 				$soma += $dado*$dado;
 			}

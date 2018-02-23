@@ -1,40 +1,43 @@
 <main class="mdl-layout__content" style="width:100%; height:90%; margin:0">
 
   <div id="tabs">
-  		<div>
-            <br>
-			
-            <input type="button" value="Mapa Original" OnClick="zoomClick(0)" />
-			<img src="Imagens/zoom_in.svg" class="zoom_button" OnClick="zoomClick(1.1)">
-			<img src="Imagens/zoom_out.svg" class="zoom_button" OnClick="zoomClick(0.9)">
-		</div>
-        <img id ="interrogacao" src="Imagens/interrogacao.png" style="display:none;">
-        
+        <div>
+            <select style="margin: 6px 0px 2px 0px;font-size:14pt;" id="Selecao">
+                <option selected="selected" value="0">Selecionar Indicador</option>
+                <option value="2">Ausência</option>
+                <option value="1">Colaboração</option>
+                <option value="3">Distanciamento pela Turma</option>
+                <option value="6">Evasão</option>
+                <option value="5">Grupos Informais</option>
+                <option value="4">Popularidade</option>
+            </select>
             
-            <div id="tabs-1" style="width:100%; height:100%"></div>
+      		<div id ="zoom_icons" style="z-index:4;">
+    		    <img src="Imagens/zoom_in.svg" id="z_in" class="zoom_button"  height="30" width="30">
+                <img src="Imagens/zoom_normal.svg" id="z_def" class="zoom_button" height="30" width="30">
+    			<img src="Imagens/zoom_out.svg" id="z_out" class="zoom_button" height="30">
+    		</div>
+            
+        </div>
+        <div id ="help">
+			<div id="closeHelp">Fechar</div>
+        	<iframe id="help-frame" src="help_interacao.html"></iframe>
+        </div>
 
-            <div id="tabs-2">
-                <!-- <form style="margin:0;"> -->
-                    <select style="margin:0;font-size:14pt;" id="Selecao">
-                        <option selected="selected" value="0">Selecionar Categorias</option>
-                        <option value="5">Agrupamento</option>
-                        <option value="2">Ausência</option>
-                        <option value="1">Colaboração</option>
-                        <option value="3">Distanciamento pela Turma</option>
-                        <option value="6">Evasão</option>
-                        <option value="4">Popularidade</option>
-                    </select>
-                 <!-- </form> -->
-          		<div id="boxEstrategia" style="visibility:hidden;position:absolute;top:80;right:3;width:300;height:100;background-color:rgba(0, 0, 0, 0.4)">
-                    <div id="closeBox">x</div>
-                    <p id="textBox" style="color:white;font-size:16px;margin:10; font-weight: 400">
-                    </p>
-                </div>
-
-                <div id="buttons" style="position:absolute; top:50; margin:0; width:100;">
-                </div>
+        <div id="logo_mapa">
+            <img src="Imagens/logo_mapa.png" height="100" width="233">
+        </div>        
+            
+        <div id="tabs-1">
+            <div id="buttons">
             </div>
         </div>
+            
+    </div>
   <!--   </div> -->
 
 </main>
+
+<script>
+	
+</script>
